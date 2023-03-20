@@ -114,19 +114,26 @@
   
   // Append Libraries
   document.head.append(...html.head.children);
-  
+
   Promise.all([
     fetch("https://cdn.jsdelivr.net/npm/marked/marked.min.js").then(e=>e.text()),
     fetch("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js").then(e=>e.text()),
-    fetch(parameters.file,{cache:"no-cache"}).then(e=>e.text()),
-  ]).then(([_marked,_hljs,file])=>{
+  ]).then(([_marked,_hljs])=>{
+
     eval(_marked);
     eval(_hljs);
-    let doc = document.createElement("div");
-    doc.innerHTML = marked.parse(file);
-    doc.id = "doc";
-    document.body.append(doc);
-    hljs.highlightAll();
+    
+    if(parameters.file){
+      fetch(parameters.file,{cache:"no-cache"}).then(e=>e.text()).then(file=>{
+        let doc = document.createElement("div");
+        doc.innerHTML = marked.parse(file);
+        doc.id = "doc";
+        document.body.append(doc);
+        hljs.highlightAll();
+      }) 
+    }else{
+      hljs.highlightAll();
+    }
   })
 
 
