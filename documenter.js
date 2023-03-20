@@ -16,6 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&family=Ubuntu:wght@400&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
   <!-- MD TO HTML LIBRARY -->
   <!-- CODE TO HTML LIBRARY -->
   <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/monokai-sublime.min.css" integrity="sha512-ade8vHOXH67Cm9z/U2vBpckPD1Enhdxl3N05ChXyFx5xikfqggrK4RrEele+VWY/iaZyfk7Bhk6CyZvlh7+5JQ==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
@@ -132,6 +133,7 @@
         hljs.highlightAll();
       }) 
     }else{
+      document.body.innerHTML = marked.parse(document.body.innerHTML)
       hljs.highlightAll();
     }
   })
