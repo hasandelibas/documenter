@@ -75,7 +75,7 @@
     }
     input,textarea{
       display:inline-block;
-      padding:5px 11px;
+      padding:6px 12px;
       margin:2px;
       border:none;
       border-radius:6px;
