@@ -77,7 +77,7 @@
       display:inline-block;
       padding:5px 11px;
       margin:2px;
-      border:1 px solid;
+      border:none;
       border-radius:6px;
       font-size:16px;
     }
