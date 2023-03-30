@@ -73,6 +73,14 @@
       font-size:16px;
       text-decoration: none;
     }
+    input,textarea{
+      display:inline-block;
+      padding:5px 11px;
+      margin:2px;
+      border:1 px solid;
+      border-radius:6px;
+      font-size:16px;
+    }
     button:hover,.button:hover{
       box-shadow:0 0 6px #0002;
     }
