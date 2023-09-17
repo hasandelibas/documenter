@@ -14,16 +14,17 @@ A light document application
 
 # 💻 Usage
 ```
-&lt;meta charset="utf8">
-&lt;script src="//hasandelibas.github.io/documenter/documenter.js">&lt;/script>
+<script src="//hasandelibas.github.io/documenter/documenter.js"></script>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-&lt;header body-class="show-menu theme-light">
-  &lt;div title>📄 Documenter&lt;/div>
-  &lt;div class="space">&lt;/div>
-  &lt;input placeholder="Search...">
-  &lt;a href="#">Api&lt;/a>
-  &lt;a href="#">App&lt;/a>
-&lt;/header>
+<header body-class="show-menu theme-light">
+  <div title>📄 Documenter</div>
+  <div class="space"></div>
+  <input placeholder="Search...">
+  <a href="#">Api</a>
+  <a href="#">App</a>
+</header>
 ```
 
 
