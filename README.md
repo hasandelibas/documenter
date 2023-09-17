@@ -13,7 +13,7 @@ A light document application
 
 
 # 💻 Usage
-```
+```html
 <script src="//hasandelibas.github.io/documenter/documenter.js"></script>
 <meta charset="utf8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
