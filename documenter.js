@@ -244,7 +244,7 @@
     }
 
     body{
-      opacity:0;
+      opacity:0.9;
     }
     a{
       /*
@@ -335,6 +335,12 @@
   </head>
   `;
 
+
+Element.prototype.empty = function(){
+  while(this.firstChild){
+    this.removeChild(this.firstChild)
+  }
+}
   // Parser
   let parser = new DOMParser();
   let html = parser.parseFromString(libraries, "text/html");
@@ -413,9 +419,6 @@
       //{ pattern: /`(.*?)`/g, replacement: '<code>$1</code>' },
       { pattern: /\[(.*?)\]\((.*?)\)/g, replacement: '<a href="$2">$1</a>' },
 
-
-      
-      
       { pattern: /^# (.*?)$/gm, replacement: '<h1>$1</h1>' },
       { pattern: /^## (.*?)$/gm, replacement: '<h2>$1</h2>' },
       { pattern: /^### (.*?)$/gm, replacement: '<h3>$1</h3>' },
@@ -471,98 +474,83 @@
 
 
   function Render(){
+    debugger
+    Render = null
     let header = document.body.querySelector("header")
     if(header){
       document.body.className += header.getAttribute("body-class")
-      document.body.prepend(header)
-    }
+      header.remove()
 
-
-    if(parameters.file){
-      
-    }else{
-      let menu    = document.createElement("menu")
-      let main    = document.createElement("main")
-      let content = document.createElement("content")
-      //main.innerHTML = marked.parse(document.body.innerHTML)
-      main.innerHTML = MarkdownConverter(document.body.innerHTML)
-      main.id="main"
-      document.body.innerHTML = ""
-      menu.innerHTML = Array.from(main.querySelectorAll("h1,h2")).map(e=>{
-        let a = document.createElement("a")
-        e.id = e.innerText.trim().split(/\s+/).join("-")
-        a.href = "#" + e.id
-        a.innerText = e.innerText
-        a.className = "menu-"+e.tagName
-        a.setAttribute("onclick","Array.from(document.querySelectorAll('menu a')).map(e=>e.classList.remove('active'));this.classList.add('active');")
-        if(decodeURIComponent(location.hash).substring(1)==e.id){a.classList.add("active")} 
-        return a.outerHTML
-      }).join("")
-
-
-
-      content.appendChild(menu)
-      content.appendChild(main)
-      document.body.appendChild(content)
-
-
-      let header = document.body.querySelector("header")
-      if(header){
-        document.body.prepend(header)
-        let contains = header.getAttribute("body-class") && header.getAttribute("body-class").indexOf("hide-menu") > -1
-        
-        if( !document.body.querySelector("header menu-opener") && !contains ){
-          let menuOpener = document.createElement("menu-opener");
-          menuOpener.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path fill="currentColor" d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>`
-          header.prepend(menuOpener)
-          menuOpener.onclick = ()=>{
-            document.body.classList.toggle("hide-menu")
-          }
+      // menu-opener
+      let contains = header.getAttribute("body-class") && header.getAttribute("body-class").indexOf("hide-menu") > -1 
+      if( !document.body.querySelector("header menu-opener") && !contains ){
+        let menuOpener = document.createElement("menu-opener");
+        menuOpener.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path fill="currentColor" d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>`
+        header.prepend(menuOpener)
+        menuOpener.onclick = ()=>{
+          document.body.classList.toggle("hide-menu")
         }
       }
 
-      
-      while(main.firstElementChild && main.firstElementChild.tagName.toUpperCase()=="BR"){
-        //main.removeChild(main.firstElementChild)
-        main.firstElementChild.remove()
-      }
-
-
-      if( document.body.querySelector("header [title]") ) {
-        let titleText = document.body.querySelector("header [title]").innerHTML.trim()
-        let title = document.createElement("title")
-        title.innerHTML = titleText
-
-
-        const regexExp = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
-
-        if( titleText.match(regexExp) ){ // First char is emoji
-          var icon   = titleText.match(regexExp)[0]
-          title.innerHTML = titleText.replace(icon,"")
-          var canvas = document.createElement('canvas');
-          canvas.width = 64;canvas.height = 64;
-          var ctx = canvas.getContext('2d');
-          ctx.fillStyle = '#000';
-          ctx.font = 'bold 48px sans-serif';
-          ctx.fillText(icon, 0, 48);
-          //document.head.querySelector("link[rel='shortcut icon']")?.remove()
-          var link = document.createElement('link');
-          link.type = 'image/x-icon';
-          link.rel = 'shortcut icon';
-          link.href = canvas.toDataURL("image/x-icon");
-          document.getElementsByTagName('head')[0].appendChild(link);
-        }
-
-        document.head.prepend(title)
-
-      }
-      
-      
-      document.body.style.opacity="1"
-      
-      var target = Array.from(document.body.querySelectorAll("[id]")).find(e=>e.id==decodeURIComponent(location.hash).substr(1))
-      if(target) target.scrollIntoView();
     }
+
+
+    let menu    = document.createElement("menu")
+    let main    = document.createElement("main")
+    let content = document.createElement("content")
+    
+    main.innerHTML = MarkdownConverter(document.body.innerHTML)
+    main.id="main"
+    document.body.empty()
+    
+    menu.innerHTML = Array.from(main.querySelectorAll("h1,h2")).map(e=>{
+      let a = document.createElement("a")
+      e.id = e.innerText.trim().split(/\s+/).join("-")
+      a.href = "#" + e.id
+      a.innerText = e.innerText
+      a.className = "menu-"+e.tagName
+      a.setAttribute("onclick","Array.from(document.querySelectorAll('menu a')).map(e=>e.classList.remove('active'));this.classList.add('active');")
+      if(decodeURIComponent(location.hash).substring(1)==e.id){a.classList.add("active")} 
+      return a.outerHTML
+    }).join("")
+
+    
+    
+    content.appendChild(menu)
+    content.appendChild(main)
+    document.body.appendChild(content)
+    if(header) document.body.prepend(header)
+ 
+    // Remove first <br> in main
+    while(main.firstElementChild && main.firstElementChild.tagName.toUpperCase()=="BR"){ main.firstElementChild.remove() }
+    // Title
+    if( document.body.querySelector("header [title]") ) {
+      let titleText = document.body.querySelector("header [title]").innerHTML.trim()
+      let title = document.createElement("title")
+      title.innerHTML = titleText
+      const regexExp = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
+      if( titleText.match(regexExp) ){ // First char is emoji
+        var icon   = titleText.match(regexExp)[0]
+        title.innerHTML = titleText.replace(icon,"")
+        var canvas = document.createElement('canvas');
+        canvas.width = 64;canvas.height = 64;
+        var ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#000';
+        ctx.font = 'bold 48px sans-serif';
+        ctx.fillText(icon, 0, 48);
+        var link = document.createElement('link');
+        link.type = 'image/x-icon';
+        link.rel = 'shortcut icon';
+        link.href = canvas.toDataURL("image/x-icon");
+        document.getElementsByTagName('head')[0].appendChild(link);
+      }
+      document.head.prepend(title)
+    }
+    // Show
+    document.body.style.opacity="1"
+    // Scroll #hash
+    var target = Array.from(document.body.querySelectorAll("[id]")).find(e=>e.id==decodeURIComponent(location.hash).substr(1))
+    if(target) target.scrollIntoView();
         
   }
 
@@ -570,4 +558,7 @@
     eval(e);
     hljs.highlightAll();
   })
+  
+
+
 })()
