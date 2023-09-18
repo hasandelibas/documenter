@@ -244,7 +244,7 @@
     }
 
     body{
-      opacity:0.9;
+      opacity:0;
     }
     a{
       /*
@@ -556,7 +556,6 @@ Element.prototype.empty = function(){
     eval(e);
     hljs.highlightAll();
   })
-  
 
 
 })()
