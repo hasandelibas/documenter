@@ -474,8 +474,6 @@ Element.prototype.empty = function(){
 
 
   function Render(){
-    debugger
-    Render = null
     let header = document.body.querySelector("header")
     if(header){
       document.body.className += header.getAttribute("body-class")
