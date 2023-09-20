@@ -572,6 +572,23 @@ Element.prototype.empty = function(){
     eval(e);
     hljs.highlightAll();
   })
+  /*
+  Promise.all([
+    fetch("https://cdn.jsdelivr.net/npm/marked/marked.min.js").then(e=>e.text()),
+    fetch("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js").then(e=>e.text()),
+  ]).then(([_marked,_hljs])=>{
+    eval(_marked);
+    eval(_hljs);
+    //Render()
+    hljs.highlightAll();
+  })
+  */
+
+
+
+
+
+
 
   progressElement = null
   function createProgressElement(){
@@ -600,7 +617,10 @@ Element.prototype.empty = function(){
     document.head.appendChild(style)
   }
 
-  window.loading = function(){
+  window.DOC = {}
+  window.Documenter = window.DOC;
+  
+  DOC.loading = function(){
     createProgressElement()
     progressElement.style.left    = "20%"
     progressElement.style.right   = "20%"
@@ -609,7 +629,7 @@ Element.prototype.empty = function(){
     progressElement.className = "documenter-breathing"
   }
 
-  window.success = function(){
+  DOC.success = function(){
     createProgressElement()
     progressElement.style.left    = "0px"
     progressElement.style.right   = "0px"
@@ -617,6 +637,34 @@ Element.prototype.empty = function(){
     setTimeout(e=>{ progressElement.style.display = "none"; },2000);
   }
 
+
+
+  DOC.download = function(url){
+    createProgressElement()
+    new Promise((res,rej)=>{
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.addEventListener('progress', function (event) {
+        if (event.lengthComputable) {
+          var percentComplete = (event.loaded / event.total) * 100;
+          let _percent =  percentComplete.toFixed(0) + "%"
+          progressElement.style.width = _percent
+        }
+      });
+      xhr.addEventListener('load', function () {
+        if (xhr.status === 200) {
+          var downloadedData = xhr.responseText;
+          progressElement.style.background = "#4C4";
+          setTimeout(e=>{progressElement.remove()},3000)
+          res(downloadedData)
+          console.log('Download completed!');
+        } else {
+          console.error('Error downloading the file. Status code: ' + xhr.status);
+        }
+      });
+      xhr.send();
+    })
+  }
 
 
 })()
