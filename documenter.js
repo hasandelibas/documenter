@@ -619,7 +619,7 @@ Element.prototype.empty = function(){
 
   window.DOC = {}
   window.Documenter = window.DOC;
-  
+
   DOC.loading = function(){
     createProgressElement()
     progressElement.style.left    = "20%"
@@ -641,7 +641,7 @@ Element.prototype.empty = function(){
 
   DOC.download = function(url){
     createProgressElement()
-    new Promise((res,rej)=>{
+    return new Promise((res,rej)=>{
       var xhr = new XMLHttpRequest();
       xhr.open('GET', url, true);
       xhr.addEventListener('progress', function (event) {
@@ -649,6 +649,8 @@ Element.prototype.empty = function(){
           var percentComplete = (event.loaded / event.total) * 100;
           let _percent =  percentComplete.toFixed(0) + "%"
           progressElement.style.width = _percent
+          progressElement.style.left    = "0px"
+          progressElement.style.background = "var(--color-primary, #17E)"
         }
       });
       xhr.addEventListener('load', function () {
