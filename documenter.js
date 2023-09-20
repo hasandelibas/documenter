@@ -322,11 +322,29 @@
       background: #0002;      
     }
     
-
     @media (max-width: 600px) {
       body{
         --menu-width: calc(100% - 0px);
       }
+    }
+
+    /*================ ICON-BUTTON ============*/
+    [icon-button]{
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 100%;
+      cursor: pointer;
+      background:transparent;
+      color:inherit;
+      padding:0;
+    }
+    [icon-button]:hover{
+      background: #0002;
     }
 
   </style>
@@ -554,4 +572,51 @@ Element.prototype.empty = function(){
     eval(e);
     hljs.highlightAll();
   })
+
+  progressElement = null
+  function createProgressElement(){
+    if(progressElement){
+      progressElement.className = ""
+    }
+    if(progressElement) return;
+    progressElement = document.createElement("div")
+    progressElement.style.position="absolute";
+    progressElement.style.top  = "0px"
+    progressElement.style.height  = "2px"
+
+    if(document.querySelector("header")) document.querySelector("header").appendChild(progressElement)
+    let css=`
+      @keyframes documenter-breathe {
+        0% {left:0%;right:100%;}
+        50% {left:0%;right:0%;}
+        100% {left:190%;right:0%;}
+      }
+      .documenter-breathing {
+        animation: documenter-breathe 2s linear infinite;
+      }
+    `;
+    let style = document.createElement("style")
+    style.innerHTML = css
+    document.head.appendChild(style)
+  }
+
+  window.loading = function(){
+    createProgressElement()
+    progressElement.style.left    = "20%"
+    progressElement.style.right   = "20%"
+    progressElement.style.background = "var(--color-primary, #17E)"
+    progressElement.style.display = "block";
+    progressElement.className = "documenter-breathing"
+  }
+
+  window.success = function(){
+    createProgressElement()
+    progressElement.style.left    = "0px"
+    progressElement.style.right   = "0px"
+    progressElement.style.background = "#4C4"
+    setTimeout(e=>{ progressElement.style.display = "none"; },2000);
+  }
+
+
+
 })()
