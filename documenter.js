@@ -708,7 +708,11 @@ Element.prototype.empty = function(){
   }
 
   documenter.message = function(text){
+    if(documenter.message.id == null) documenter.message.id = 0
+    documenter.message.id++ 
+
     let div = document.createElement("div")
+    div.id = "documenter-message-id-"+documenter.message.id
     div.style.position = "fixed";
     div.style.right  = "40px"
     div.style.maxWidth = "calc(100% - 80px)"
@@ -719,18 +723,34 @@ Element.prototype.empty = function(){
     div.style.padding ="1em"
     div.style.opacity = "0"
     div.style.transform = "translateX(100%)"
-    div.style.transition = ".5s";
+    div.style.transition = "transform .5s, opacity .5s";
     div.innerHTML = text
     document.body.appendChild(div)
     requestAnimationFrame(e=>{
-      div.style.opacity = "1"
-      div.style.transform = "translateX(0%)"
+      let el = document.querySelector("#"+div.id)
+      if(el){
+        el.style.opacity = "1"
+        el.style.transform = "translateX(0%)"
+      }
     })
     setTimeout(e=>{
-      div.remove()
+      let el = document.querySelector("#"+div.id)
+      if(el){
+        el.remove()
+      }
     },5000) 
+    return div;
   }
 
+  window.addEventListener("error",function(event, source, lineno, colno, error){
+    let text = "<strong>Error:</strong> " + event.message + "<br>" +
+      //"<strong>Source:</strong> " + event?.srcElement?.location?.pathname + "<br>" +
+      "<strong>Source:</strong> " + event.filename + "<br>" +
+      "<strong>Line:</strong> " + event.lineno + "<br>" +
+      "<strong>Column:</strong> " + event.colno + "<br>";
+    let div = documenter.message("<pre style='padding:0;margin:0;font-size:.8em'>"+text+"</pre>","red")
+    div.style.background="red"
+  })
 
 
 })()
