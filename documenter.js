@@ -482,11 +482,8 @@ Element.prototype.empty = function(){
   
   }
 
-
-  
   
   document.addEventListener("DOMContentLoaded", Render)
-  //document.addEventListener("load", Render)
 
 
   function Render(){
@@ -589,7 +586,6 @@ Element.prototype.empty = function(){
 
 
   window.documenter = {}
-  window.DOC = window.Documenter = window.documenter;
   let succesTimeout = null
 
   progressElement = null
@@ -734,4 +730,7 @@ Element.prototype.empty = function(){
       div.remove()
     },5000) 
   }
+
+
+
 })()
