@@ -529,7 +529,20 @@ Element.prototype.empty = function(){
     }).join("")
 
     
-    
+    // Regroup H1 downside items
+    let groups = Array.from(main.childNodes).map((e,i)=>e.tagName=="H1"?i:-1).filter(e=>e!=-1)
+    groups = groups.map((e,i,a)=>{
+      return  Array.from(main.childNodes).slice(e,a[i+1])
+    })
+    groups = groups.map((e,i)=>{
+      let div = document.createElement("div")
+      div.id="documenter-tab-"+i
+      div.className = "documenter-tab"
+      e.map(el=>div.appendChild(el))
+      return div
+    })
+    groups.map(e=>main.appendChild(e))
+
     content.appendChild(menu)
     content.appendChild(main)
     document.body.appendChild(content)
@@ -572,26 +585,16 @@ Element.prototype.empty = function(){
     eval(e);
     hljs.highlightAll();
   })
-  /*
-  Promise.all([
-    fetch("https://cdn.jsdelivr.net/npm/marked/marked.min.js").then(e=>e.text()),
-    fetch("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js").then(e=>e.text()),
-  ]).then(([_marked,_hljs])=>{
-    eval(_marked);
-    eval(_hljs);
-    //Render()
-    hljs.highlightAll();
-  })
-  */
+  
 
 
-
-
-
-
+  window.documenter = {}
+  window.DOC = window.Documenter = window.documenter;
+  let succesTimeout = null
 
   progressElement = null
   function createProgressElement(){
+    if(succesTimeout) clearTimeout(succesTimeout)
     if(progressElement){
       progressElement.className = ""
     }
@@ -600,6 +603,7 @@ Element.prototype.empty = function(){
     progressElement.style.position="absolute";
     progressElement.style.top  = "0px"
     progressElement.style.height  = "2px"
+    progressElement.style.transition  = "0.2s linear"
 
     if(document.querySelector("header")) document.querySelector("header").appendChild(progressElement)
     let css=`
@@ -617,56 +621,117 @@ Element.prototype.empty = function(){
     document.head.appendChild(style)
   }
 
-  window.DOC = {}
-  window.Documenter = window.DOC;
-
-  DOC.loading = function(){
+  documenter.loading = function(percent=null){
+    if(percent && percent>=100) return documenter.success()
     createProgressElement()
-    progressElement.style.left    = "20%"
-    progressElement.style.right   = "20%"
+    progressElement.style.height  = "3px"  
+    progressElement.style.left    = "0px"
+    progressElement.style.right   = null
+    if(percent==null){
+      progressElement.style.width=null
+      progressElement.className = "documenter-breathing"
+    }else{
+      progressElement.style.width= percent + "%"
+      progressElement.className = ""
+    }
     progressElement.style.background = "var(--color-primary, #17E)"
-    progressElement.style.display = "block";
-    progressElement.className = "documenter-breathing"
+    progressElement.style.opacity = "1"
   }
 
-  DOC.success = function(){
+  documenter.success = function(){
     createProgressElement()
+    progressElement.style.height  = "5px"
     progressElement.style.left    = "0px"
     progressElement.style.right   = "0px"
+    progressElement.style.width   = null
+    progressElement.style.opacity = "1"
     progressElement.style.background = "#4C4"
-    setTimeout(e=>{ progressElement.style.display = "none"; },2000);
+    progressElement.className = ""
+    succesTimeout = setTimeout(e=>{ progressElement.style.opacity = "0"; },2000);
   }
 
 
 
-  DOC.download = function(url){
+  documenter.load = function(url,config={}){
+    if(url.indexOf("?")>-1){
+      url += "&v=" + parseInt(Math.random() * 16**12).toString(16)
+    }else{
+      url += "?v=" + parseInt(Math.random() * 16**12).toString(16)
+    }
     createProgressElement()
+    config.method = config.method || "GET";
     return new Promise((res,rej)=>{
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', url, true);
+      xhr.open( config.method , url, true);
+      xhr.responseType = 'arraybuffer';
       xhr.addEventListener('progress', function (event) {
         if (event.lengthComputable) {
           var percentComplete = (event.loaded / event.total) * 100;
-          let _percent =  percentComplete.toFixed(0) + "%"
-          progressElement.style.width = _percent
-          progressElement.style.left    = "0px"
-          progressElement.style.background = "var(--color-primary, #17E)"
+          documenter.loading(percentComplete.toFixed(2))
         }
       });
       xhr.addEventListener('load', function () {
         if (xhr.status === 200) {
-          var downloadedData = xhr.responseText;
-          progressElement.style.background = "#4C4";
-          setTimeout(e=>{progressElement.remove()},3000)
-          res(downloadedData)
-          console.log('Download completed!');
+          documenter.success()
+          response = xhr
+          res({
+            text : function(){
+              return Promise.resolve(new TextDecoder("utf-8").decode(xhr.response))
+            },
+            blob : function(){
+              return Promise.resolve(new Blob(
+                [xhr.response],
+                //{'type' : type},
+              ));
+            },
+            json : function(){
+              return Promise.resolve( JSON.parse( new TextDecoder("utf-8").decode(xhr.response) ))
+            },
+          })
         } else {
           console.error('Error downloading the file. Status code: ' + xhr.status);
+          rej(xhr.status)
         }
       });
       xhr.send();
     })
   }
 
+  documenter.download = function(data, filename = "download.txt"){
+    var element = document.createElement('a');
+    if(typeof(data)=="string"){
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
+    }else{
+      element.setAttribute('href', URL.createObjectURL(data) );
+    }
+    element.setAttribute('download', filename);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
 
+  documenter.message = function(text){
+    let div = document.createElement("div")
+    div.style.position = "fixed";
+    div.style.right  = "40px"
+    div.style.maxWidth = "calc(100% - 80px)"
+    div.style.bottom = "40px"
+    div.style.background = "#000"
+    div.style.color     = "white"
+    div.style.borderRadius = "10px"
+    div.style.padding ="1em"
+    div.style.opacity = "0"
+    div.style.transform = "translateX(100%)"
+    div.style.transition = ".5s";
+    div.innerHTML = text
+    document.body.appendChild(div)
+    requestAnimationFrame(e=>{
+      div.style.opacity = "1"
+      div.style.transform = "translateX(0%)"
+    })
+    setTimeout(e=>{
+      div.remove()
+    },5000) 
+  }
 })()
