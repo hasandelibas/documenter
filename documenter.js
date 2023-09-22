@@ -117,6 +117,7 @@
       bottom:0;
       padding:10px 0;
       overflow:auto;
+      transition:.4s;
     }
     menu a{
       display:block;
@@ -137,6 +138,8 @@
     }
     menu .menu-H2 {
       padding-left: 24px;
+      font-size:.95em;
+      opacity: .95;
     }
 
     main{
@@ -148,15 +151,10 @@
       bottom: 0;
       overflow: auto;
       padding:0px 20px;
+      transition:.4s;
     }
 
-    body.hide-menu menu{
-      display:none;
-    }
-    body.hide-menu main{
-      width: 100%;
-      left:0px;
-    }
+    
 
     code,.code{
       font-family: 'Ubuntu Mono', monospace;
@@ -172,6 +170,8 @@
     }
     pre code{
       display: block;
+      overflow-x:auto;
+      margin:0;
     }
     
     table code{
@@ -255,9 +255,6 @@
       margin:0;
       padding:0.5em 0;
     }
-    pre code{
-      overflow-x:auto;
-    }
     
     
 
@@ -306,6 +303,7 @@
       background: var(--color);
     }
 
+    /*========= menu-opener =========*/
     header menu-opener{
       width: 40px;
       height: 40px;
@@ -325,6 +323,16 @@
     @media (max-width: 600px) {
       body{
         --menu-width: calc(100% - 0px);
+      }
+      main{
+        width:100%!important;
+        padding:0px 10px;
+      }
+    }
+
+    @media (min-width: 600px) {
+      body.hide-opener menu-opener{
+        display:none;
       }
     }
 
@@ -346,6 +354,26 @@
     [icon-button]:hover{
       background: #0002;
     }
+
+
+
+    
+    body.hide-menu menu{
+      left: -100%;
+    }
+    body.hide-menu main{
+      width: 100%;
+      left:0px;
+    }
+
+    body.hide-header header{
+      top: -50px;
+      opacity: 0;
+    }
+    body.hide-header content{
+      top:0;
+    }
+
 
   </style>
   </head>
@@ -431,7 +459,7 @@ Element.prototype.empty = function(){
 
       //{ pattern: /```(.*?)\n(.*?)```/gm, replacement: '<code language=$1>$2</code>' },
       //{ pattern: /```(.*?)```/g, replacement: '<code>$1</code>' },
-      //{ pattern: /``(.*?)``/g, replacement: '<code>$1</code>' },
+      //{ pattern: /``(.*?)``/g, replacement: '<pre><code>$1</code></pre>' },
       //{ pattern: /`(.*?)`/g, replacement: '<code>$1</code>' },
       { pattern: /\[(.*?)\]\((.*?)\)/g, replacement: '<a href="$2">$1</a>' },
 
@@ -460,17 +488,34 @@ Element.prototype.empty = function(){
 
     let htmlText = markdownText;
     while(mat = htmlText.matchRequirsive("```","```")){
-      console.log(mat)
+      //console.log(mat)
       let language = mat[1].split("\n")[0].trim()
 
       let className="language-"+language
-      console.log(className)
+      //console.log(className)
       if(language=="js"){
         className="language-javascript"
       }
       let code = mat[1].split("\n").slice(1).join("\n")
       code = code.split("<").join("&lt;")
       htmlText = htmlText.replace(mat[0], '<pre><code class="'+className+'">'+code+'</code></pre>' )
+    }
+    // ``
+    while(mat = htmlText.matchRequirsive("``","``")){
+      let code = mat[1]
+      code = code.split("<").join("&lt;")
+      htmlText = htmlText.replace(mat[0], '<span><code>'+code+'</code></span>' )
+    }
+
+    rules.forEach(rule => {
+      htmlText = htmlText.replace(rule.pattern, rule.replacement);
+    });
+
+    // `
+    while(mat = htmlText.matchRequirsive("`","`")){
+      let code = mat[1]
+      code = code.split("<").join("&lt;")
+      htmlText = htmlText.replace(mat[0], '<code>'+code+'</code>' )
     }
 
     rules.forEach(rule => {
@@ -505,6 +550,8 @@ Element.prototype.empty = function(){
 
     }
 
+    // Auto hide menu when starting
+    if(window.innerWidth<600){document.body.classList.add("hide-menu")}
 
     let menu    = document.createElement("menu")
     let main    = document.createElement("main")
@@ -514,16 +561,23 @@ Element.prototype.empty = function(){
     main.id="main"
     document.body.empty()
     
-    menu.innerHTML = Array.from(main.querySelectorAll("h1,h2")).map(e=>{
+    let h1_index = -1
+    Array.from(main.querySelectorAll("h1,h2")).map(e=>{
       let a = document.createElement("a")
       e.id = e.innerText.trim().split(/\s+/).join("-")
-      a.href = "#" + e.id
+      a.href = "#" + e.id  
       a.innerText = e.innerText
       a.className = "menu-"+e.tagName
-      a.setAttribute("onclick","Array.from(document.querySelectorAll('menu a')).map(e=>e.classList.remove('active'));this.classList.add('active');")
+      let onclick = 'Array.from(document.querySelectorAll("menu a")).map(e=>e.classList.remove("active"));this.classList.add("active");if(window.innerWidth<600){document.body.classList.add("hide-menu")};'
+      if(document.body.classList.contains("tab-system") ){
+        if(e.tagName=="H1") h1_index++
+        onclick += 'Array.from(document.querySelectorAll("[documenter-tab]")).map(e=>e.style.display="none");document.querySelectorAll("[documenter-tab]")['+h1_index+'].style.display = null'  
+      }
+      a.setAttribute("onclick",onclick)
+      
       if(decodeURIComponent(location.hash).substring(1)==e.id){a.classList.add("active")} 
-      return a.outerHTML
-    }).join("")
+      menu.appendChild(a)
+    })
 
     
     // Regroup H1 downside items
@@ -533,8 +587,8 @@ Element.prototype.empty = function(){
     })
     groups = groups.map((e,i)=>{
       let div = document.createElement("div")
-      div.id="documenter-tab-"+i
-      div.className = "documenter-tab"
+      div.id="documenter-tab-"+e[0].id
+      div.setAttribute("documenter-tab","")
       e.map(el=>div.appendChild(el))
       return div
     })
@@ -570,17 +624,56 @@ Element.prototype.empty = function(){
       }
       document.head.prepend(title)
     }
-    // Show
-    document.body.style.opacity="1"
+
+    // [documenter-icon-x]
+
+    let icons = {
+      'arrow-left' : '<svg fill="currentColor" style="width:1.5em;height:1.5em" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 -960 960 960"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"></path></svg></a>'
+    }
+
+    for(let icon in icons){
+      let selector = "[documenter-icon-"+icon+"]";
+      Array.from(document.querySelectorAll(selector)).map(e=>{
+        e.innerHTML = icons[icon]
+      })
+    }
+
+
+    // Tab System
+    if(document.body.classList.contains("tab-system")){
+      var target = null
+      target = Array.from(document.body.querySelectorAll("[id]")).find(e=>e.id==decodeURIComponent(location.hash).substr(1))
+      if(target) target=target.parentElement
+      if(target){
+        Array.from(document.querySelectorAll("[documenter-tab]")).map(e=>e.style.display="none");
+        target.style.display = null
+      }else{
+        target = menu.firstElementChild
+        if(target) target.click()
+      }
+    }
+  
     // Scroll #hash
     var target = Array.from(document.body.querySelectorAll("[id]")).find(e=>e.id==decodeURIComponent(location.hash).substr(1))
     if(target) target.scrollIntoView();
-        
+  
+    
+
+
+
+    // Show
+    document.body.style.opacity="1"
   }
 
   fetch("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js").then(e=>e.text()).then(e=>{
     eval(e);
+    window.hljs = hljs
     hljs.highlightAll();
+    const codeElements = document.querySelectorAll('span code');
+    codeElements.forEach((element) => {
+      hljs.highlightElement(element)
+      //hljs.highlightAll({ element });
+    });
   })
   
 
@@ -596,12 +689,15 @@ Element.prototype.empty = function(){
     }
     if(progressElement) return;
     progressElement = document.createElement("div")
-    progressElement.style.position="absolute";
+    progressElement.style.position="fixed";
     progressElement.style.top  = "0px"
     progressElement.style.height  = "2px"
     progressElement.style.transition  = "0.2s linear"
+    progressElement.style.zIndex  = "100"
 
-    if(document.querySelector("header")) document.querySelector("header").appendChild(progressElement)
+    //if(document.querySelector("header")) document.querySelector("header").appendChild(progressElement)
+    document.body.prepend(progressElement)
+
     let css=`
       @keyframes documenter-breathe {
         0% {left:0%;right:100%;}
@@ -712,19 +808,25 @@ Element.prototype.empty = function(){
     documenter.message.id++ 
 
     let div = document.createElement("div")
+    div.setAttribute("documenter-message","")
     div.id = "documenter-message-id-"+documenter.message.id
     div.style.position = "fixed";
-    div.style.right  = "40px"
-    div.style.maxWidth = "calc(100% - 80px)"
-    div.style.bottom = "40px"
+    div.style.right  = "20px"
+    div.style.maxWidth = "calc(100% - 40px)"
+    div.style.bottom = "20px"
     div.style.background = "#000"
     div.style.color     = "white"
     div.style.borderRadius = "10px"
     div.style.padding ="1em"
     div.style.opacity = "0"
     div.style.transform = "translateX(100%)"
-    div.style.transition = "transform .5s, opacity .5s";
+    div.style.transition = "transform .5s, opacity .5s, bottom 0.5s";
     div.innerHTML = text
+    
+    let minTop = Math.min(window.innerHeight,...Array.from(document.querySelectorAll("[documenter-message]")).map(e=>e.getBoundingClientRect().y) ) 
+    div.style.bottom = (window.innerHeight-minTop + 20) + "px"
+    
+
     document.body.appendChild(div)
     requestAnimationFrame(e=>{
       let el = document.querySelector("#"+div.id)
@@ -736,15 +838,20 @@ Element.prototype.empty = function(){
     setTimeout(e=>{
       let el = document.querySelector("#"+div.id)
       if(el){
-        el.remove()
+        setTimeout(e=>el.remove(),1000)
+        el.style.transform = "translate(100%)";
+        el.style.opacity = "0";
       }
-    },5000) 
+      Array.from(document.querySelectorAll("[documenter-message]")).map(e=>{
+        if(e!=el) e.style.bottom = (parseFloat(e.style.bottom) - el.getBoundingClientRect().height - 20) + "px"
+      })
+    },6000) 
     return div;
   }
 
   window.addEventListener("error",function(event, source, lineno, colno, error){
+    if(document.body.classList.contains("disable-error")) return
     let text = "<strong>Error:</strong> " + event.message + "<br>" +
-      //"<strong>Source:</strong> " + event?.srcElement?.location?.pathname + "<br>" +
       "<strong>Source:</strong> " + event.filename + "<br>" +
       "<strong>Line:</strong> " + event.lineno + "<br>" +
       "<strong>Column:</strong> " + event.colno + "<br>";
