@@ -3,6 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <header body-class="show-menu theme-light">
+  <a href="../" icon-button documenter-icon-arrow-left></a>
   <div title>📄 Documenter</div>
   <div class="space"></div>
   <!-- <input placeholder="Search..."> -->
@@ -14,14 +15,27 @@
 # 📄 Documenter
 A light document application
 
-- Menu click fix
-+ Make pre code 14px
 + Mobile Support
 + One File
 + Header Bar
 + Code View with hljs
 * **development** : https://apps.asenax.com/documenter/
 * **relase** : https://hasandelibas.github.io/documenter/
+
+# ✅ Task
++ #documenter-tab-0 
++ documenter.message multiple
++ [back-button] inner html svg
++ .tab-system  
++ .enable-error-messages
++ .hide-header
++ .show-header
++ .hide-opener
++ .show-opener
++ Mobile container padding fix
++ Pre Code fix
++ left Menu click fix
++ Make pre code 14px
 
 # 💻 Usage
 ```html
@@ -30,6 +44,7 @@ A light document application
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <header body-class="show-menu theme-light">
+  <a href="../" icon-button documenter-icon-arrow-left></a>
   <div title>📄 Documenter</div>
   <div class="space"></div>
   <input placeholder="Search...">
@@ -47,9 +62,114 @@ We can change options in header tag with **body-class** attribute
 <header body-class="hide-menu">
 ```
 
+## hide-header
+* hide-header
+* show-header
+```html
+<header body-class="hide-header">
+```
+
 ## theme-dark
 * theme-light
 * theme-dark
 ```html
 <header body-class="theme-dark">
 ```
+
+## tab-system
+* link-system    (default)
+* tab-system
+```html
+<header body-class="tab-system">
+```
+<button onclick="document.body.classList.add('tab-system');document.querySelector('menu a').click()">.tab-system</button>
+
+
+## disable-error
+* enable-error   (default)
+* disable-error
+```html
+<header body-class="disable-error">
+```
+<button onclick="no_name_function()">Example</button>
+
+
+## hide-opener
+* show-opener  (default)
+* hide-opener
+```html
+<header body-class="hide-opener">
+```
+
+
+## icons
+
+<table>
+  <tr>
+    <td>
+      <span documenter-icon-arrow-left></span>
+    </td>
+    <td>
+      `<span documenter-icon-arrow-left></span>`
+    </td>
+  </tr>
+</table>
+
+
+# ⚙️ documenter
+
+## .loading(number|null) 
+
+<button onclick="documenter.loading()"> documenter.loading() </button>
+<button onclick="documenter.loading(10)"> documenter.loading(10) </button>
+<button onclick="documenter.loading(50)"> documenter.loading(50) </button>
+<button onclick="documenter.loading(80)"> documenter.loading(80) </button>
+
+```
+documenter.loading()
+documenter.loading(10)
+documenter.loading(50)
+```
+
+## .success()
+<button onclick="documenter.loading(100)"> documenter.loading(100) </button>
+<button onclick="documenter.success()"> documenter.success() </button>
+
+```
+documenter.loading(100)
+documenter.success()
+```
+
+## .load(url)
+Like fetch 
+<button onclick="documenter.load('world_map.pdf').then(e=>e.blob()).then(console.log)"> documenter.load('world_map.pdf') </button>
+```
+documenter.load("url").(e=>e.text())
+documenter.load("url").(e=>e.json())
+documenter.load("url").(e=>e.blob())
+```
+
+```
+documenter.load("documenter.js").then(e=>e.text()).then( console.log )
+documenter.load("https://www.getmidas.com/wp-json/midas-api/v1/midas_table_data",{method:"POST"}).then(e=>e.json()).then( console.log )
+documenter.load("world_map.pdf").then(e=>e.blob()).then(function(text){
+  document.download(text,"file.pdf")
+})
+```
+
+
+## .download(string|blob,filename)
+```
+documenter.download("Hello World","test.txt")
+```
+
+## .message(string)
+
+<button onclick="documenter.message('Hello World!')"> documenter.message("Hello World!") </button>
+
+```
+documenter.message("Hello World!")
+```
+<script>
+  //asdasd()
+</script>
