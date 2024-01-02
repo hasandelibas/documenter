@@ -104,6 +104,7 @@
       box-sizing: border-box;
       line-height: 1.5;
       background: #88888840;
+      color:inherit;
       opacity:.8;
     }
     menu{
@@ -569,9 +570,9 @@ Element.prototype.empty = function(){
       a.innerText = e.innerText
       a.className = "menu-"+e.tagName
       let onclick = 'Array.from(document.querySelectorAll("menu a")).map(e=>e.classList.remove("active"));this.classList.add("active");if(window.innerWidth<600){document.body.classList.add("hide-menu")};'
+      if(e.tagName=="H1") h1_index++
+      onclick += 'if(document.body.classList.contains("tab-system")){ Array.from(document.querySelectorAll("[documenter-tab]")).map(e=>e.style.display="none");document.querySelectorAll("[documenter-tab]")['+h1_index+'].style.display = null;}'  
       if(document.body.classList.contains("tab-system") ){
-        if(e.tagName=="H1") h1_index++
-        onclick += 'Array.from(document.querySelectorAll("[documenter-tab]")).map(e=>e.style.display="none");document.querySelectorAll("[documenter-tab]")['+h1_index+'].style.display = null'  
       }
       a.setAttribute("onclick",onclick)
       
@@ -626,11 +627,10 @@ Element.prototype.empty = function(){
     }
 
     // [documenter-icon-x]
-
     let icons = {
       'arrow-left' : '<svg fill="currentColor" style="width:1.5em;height:1.5em" xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 -960 960 960"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"></path></svg></a>'
     }
-
+    icons["left-arrow"] = icons["arrow-left"]
     for(let icon in icons){
       let selector = "[documenter-icon-"+icon+"]";
       Array.from(document.querySelectorAll(selector)).map(e=>{
@@ -745,17 +745,37 @@ Element.prototype.empty = function(){
 
 
   documenter.load = function(url,config={}){
+    config.method = config.method || "GET";
+    config.body   = config.body || config.data || ''
+
+
     if(url.indexOf("?")>-1){
       url += "&v=" + parseInt(Math.random() * 16**12).toString(16)
     }else{
       url += "?v=" + parseInt(Math.random() * 16**12).toString(16)
     }
-    createProgressElement()
-    config.method = config.method || "GET";
+    documenter.loading(0)
     return new Promise((res,rej)=>{
       var xhr = new XMLHttpRequest();
       xhr.open( config.method , url, true);
       xhr.responseType = 'arraybuffer';
+
+      let body = null
+      if(config.body instanceof FormData){// form data
+        body = config.body
+      }else if(typeof(config.body) == 'string'){ // string
+        body = config.body
+      }else if(typeof(config.body) == 'object'){ // json
+        //xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+        //body = JSON.stringify(config.body)
+        var form_data = new FormData();
+        for ( var key in config.body ) {
+          form_data.append(key, config.body[key]);
+        }
+        body = form_data
+
+      }
+
       xhr.addEventListener('progress', function (event) {
         if (event.lengthComputable) {
           var percentComplete = (event.loaded / event.total) * 100;
@@ -785,8 +805,12 @@ Element.prototype.empty = function(){
           rej(xhr.status)
         }
       });
-      xhr.send();
+      xhr.send(body);
     })
+  }
+
+  documenter.post = function(url,data){
+    return documenter.load(url,{method:'POST',data:data})
   }
 
   documenter.download = function(data, filename = "download.txt"){
@@ -849,6 +873,53 @@ Element.prototype.empty = function(){
     return div;
   }
 
+
+  
+  documenter.readText = function(){
+    return new Promise((res,rej)=>{
+      let input =document.createElement("input")
+      input.type = "file"
+      input.oninput = function(event){
+        var reader = new FileReader();
+        reader.onload = function() {
+          var text = reader.result;
+          res(text)
+        };
+        reader.readAsText(input.files[0]);
+      }
+      input.click()
+    })
+  }
+  
+  documenter.table = function(data){
+    function c(tag,attr={},html="",parent=null){
+      let el = document.createElement(tag)
+      for(let a in attr){
+        el.setAttribute(a,attr[a])
+      }
+      el.innerHTML = html
+      if(parent!=null) parent.appendChild(el)
+      return el
+    }
+
+    function Table(obj){
+      let table=c("table",{style:"width:100%;text-align:right;"})
+        tr=c("tr",{},"",table)
+          for(let o in obj[0]){
+            c("th",{},o,tr)
+          }
+        for(let row of obj){
+          tr=c("tr",{},"",table)
+            for(let col in row){
+              td=c("td",{},row[col],tr)
+            }
+        }
+      return table
+    }
+    return Table(data)
+  }
+
+
   window.addEventListener("error",function(event, source, lineno, colno, error){
     if(document.body.classList.contains("disable-error")) return
     let text = "<strong>Error:</strong> " + event.message + "<br>" +
@@ -858,6 +929,5 @@ Element.prototype.empty = function(){
     let div = documenter.message("<pre style='padding:0;margin:0;font-size:.8em'>"+text+"</pre>","red")
     div.style.background="red"
   })
-
 
 })()
