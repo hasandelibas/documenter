@@ -1,4 +1,4 @@
-<script src="documenter.js?v=1.0.2"></script>
+<script src="documenter.js?v=1.0.3"></script>
 <meta charset="utf8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -6,7 +6,7 @@
   <a href="../" icon-button documenter-icon-arrow-left></a>
   <div title>📄 Documenter</div>
   <div class="space"></div>
-  <!-- <input placeholder="Search..."> -->
+  <input placeholder="Search...">
   <a href="#">Api</a>
   <a href="#">App</a>
 </header>
@@ -36,6 +36,7 @@ A light document application
 + Pre Code fix
 + left Menu click fix
 + Make pre code 14px
++ light theme input problem
 
 # 💻 Usage
 ```html
@@ -140,13 +141,14 @@ documenter.loading(100)
 documenter.success()
 ```
 
-## .load(url)
+## .load(url, config)
 Like fetch 
 <button onclick="documenter.load('world_map.pdf').then(e=>e.blob()).then(console.log)"> documenter.load('world_map.pdf') </button>
 ```
-documenter.load("url").(e=>e.text())
-documenter.load("url").(e=>e.json())
-documenter.load("url").(e=>e.blob())
+documenter.load("url").then(e=>e.text())
+documenter.load("url").then(e=>e.json())
+documenter.load("url").then(e=>e.blob())
+documenter.load("url",{method:'GET',data:{name:'John'}}).then(e=>e.json())
 ```
 
 ```
@@ -157,19 +159,36 @@ documenter.load("world_map.pdf").then(e=>e.blob()).then(function(text){
 })
 ```
 
-
+## .post(url, data: FormData | Object | string)
+```
+documenter.post("url",{name:'John'}).then(e=>e.text())
+```
 ## .download(string|blob,filename)
 ```
 documenter.download("Hello World","test.txt")
 ```
 
-## .message(string)
+## .message(string) : HTMLDivElement
 
 <button onclick="documenter.message('Hello World!')"> documenter.message("Hello World!") </button>
 
 ```
 documenter.message("Hello World!")
 ```
-<script>
-  //asdasd()
-</script>
+
+## .readText() : Promise(e:String)
+Select file and read as text.
+<button onclick="documenter.readText().then(text=>console.log(text))"> documenter.readText().then(text=>console.log(text)) </button>
+```js
+documenter.readText().then(text=>console.log(text))
+```
+
+## .table( object ) : HTMLTableElement
+Create table object 
+```js
+let table = documenter.table([
+  {name:"John",surname:"Doe",age:26},
+  {name:"Mary",surname:"Doe",age:25}
+])
+main.appendChild(table)
+```
