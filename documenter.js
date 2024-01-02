@@ -305,21 +305,6 @@
     }
 
     /*========= menu-opener =========*/
-    header menu-opener{
-      width: 40px;
-      height: 40px;
-      min-width:40px;
-      min-height:40px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 100%;
-      cursor: pointer;
-    }
-
-    menu-opener:hover{
-      background: #0002;      
-    }
     
     @media (max-width: 600px) {
       body{
@@ -351,9 +336,12 @@
       background:transparent;
       color:inherit;
       padding:0;
+      overflow:hidden
     }
-    [icon-button]:hover{
-      background: #0002;
+    [icon-button]:hover:after{
+      content: "";
+      box-shadow: 0 0 0 1000px;
+      opacity: 0.2;
     }
 
 
@@ -542,6 +530,7 @@ Element.prototype.empty = function(){
       let contains = header.getAttribute("body-class") && header.getAttribute("body-class").indexOf("hide-menu") > -1 
       if( !document.body.querySelector("header menu-opener") && !contains ){
         let menuOpener = document.createElement("menu-opener");
+        menuOpener.setAttribute("icon-button","")
         menuOpener.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path fill="currentColor" d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>`
         header.prepend(menuOpener)
         menuOpener.onclick = ()=>{
