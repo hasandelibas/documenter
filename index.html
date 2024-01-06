@@ -193,3 +193,27 @@ let table = documenter.table([
 ])
 main.appendChild(table)
 ```
+
+
+## .on(event,selector,function)
+
+```
+documenter.on("click","pre",function(e){
+  console.log(this.innerText);
+  console.log("Event:",e)
+})
+```
+
+
+## .on(event,function)
+
+```
+documenter.on("ready",function(e){
+  console.log("I am ready");
+})
+```
+<script>
+  documenter.on("ready",function(e){
+    console.log("I am ready");
+  })
+</script>
