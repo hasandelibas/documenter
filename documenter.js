@@ -371,7 +371,8 @@
       background:transparent;
       color:inherit;
       padding:0;
-      overflow:hidden
+      overflow:hidden;
+      gap:0!important;
     }
     [icon-button]:hover:after{
       content: "";
