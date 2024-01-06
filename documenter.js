@@ -22,6 +22,34 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/monokai-sublime.min.css" integrity="sha512-ade8vHOXH67Cm9z/U2vBpckPD1Enhdxl3N05ChXyFx5xikfqggrK4RrEele+VWY/iaZyfk7Bhk6CyZvlh7+5JQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
+
+    .flex-x,[flex-x]{
+      display:flex;
+      flex-direction:row;
+    }
+    .flex-cx,[flex-cx]{
+      display:flex;
+      flex-direction:row;
+      align-items:center;
+      justify-content: center;
+    }
+    .flex-y,[flex-y]{
+      display:flex;
+      flex-direction:column;
+    }
+    .flex-cy,[flex-cy]{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content: center;
+    }
+    .space ,[space],.flex-1,[flex-1],space{flex:1;}
+
+    .gap-1rem,[gap-1rem],.gap,[gap]{gap:1rem}
+    .padding-1rem, [padding-1rem],.padding, [padding]{padding:1rem}
+    .padding-1rem-x,[padding-1rem-x]{padding-left:1rem;padding-right:1rem;}
+    
+
     body{
       font-family: 'Ubuntu', sans-serif;
       font-family: 'Segoe UI', Tahoma, sans-serif;
@@ -90,6 +118,13 @@
     }
     [button],.button{
       margin-right: 6px;
+    }
+    header [title]{
+      display:flex;
+      flex-direction:row;
+      align-items:center;
+      justify-content: center;
+      gap:.5rem;
     }
     header input{
       border-radius: 100px;
@@ -611,6 +646,16 @@ Element.prototype.empty = function(){
         link.rel = 'shortcut icon';
         link.href = canvas.toDataURL("image/x-icon");
         document.getElementsByTagName('head')[0].appendChild(link);
+      }else{
+        title.innerHTML = document.body.querySelector("header [title]").innerText
+        let image =  document.body.querySelector("header [title] img")
+        if( image ){
+          var link = document.createElement('link');
+          link.type = 'image/x-icon';
+          link.rel = 'shortcut icon';
+          link.href = image.src;
+          document.getElementsByTagName('head')[0].appendChild(link);
+        }
       }
       document.head.prepend(title)
     }
@@ -918,5 +963,27 @@ Element.prototype.empty = function(){
     let div = documenter.message("<pre style='padding:0;margin:0;font-size:.8em'>"+text+"</pre>","red")
     div.style.background="red"
   })
+
+
+  documenter.on = function(event,selector,fn){
+    if(event=="ready") event = "DOMContentLoaded"
+    if(fn==null && selector instanceof Function){
+      fn = selector
+      selector = false
+    }
+    document.addEventListener(event,function(e){
+      if(selector==false){
+        return fn.bind(document)(e)
+      }
+      let els = e.composedPath();
+      for( el of els ){
+        if( el instanceof Document ) continue;
+        if( el instanceof Window ) continue;
+        if( el.matches(selector) ){
+          fn.bind(el)(e)
+        }
+      }
+    })
+  }
 
 })()
