@@ -987,4 +987,46 @@ Element.prototype.empty = function(){
     })
   }
 
+    
+  documenter.csv = {}
+  documenter.csv.parse = function(text){
+    let len = text.length;
+    let rows = [];
+    let list = [];
+    let data = "";
+    let inQuotes = false;
+    for(let i=0; i<len ;i++ ){
+      let char = text[i];
+      if( inQuotes==false && char == "," ){
+        list.push(data)
+        data = ""
+        continue
+      }
+      if( inQuotes==false && char=='"' ){
+        inQuotes=true
+        continue
+      }
+      if( inQuotes==true && char=='"' && text[i+1] == '"' ){
+        data += '"'
+        i += 1
+        continue
+      }
+      if( inQuotes==true && char=='"' && text[i+1] != '"' ){
+        inQuotes=false
+        continue
+      }
+      if( inQuotes==false && char=="\n"){
+        list.push(data)
+        rows.push(list)
+        list = []
+        data = ""
+        continue
+      }
+      data += char 
+    }
+    return rows
+  }
+
+
+
 })()
