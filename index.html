@@ -217,3 +217,17 @@ documenter.on("ready",function(e){
     console.log("I am ready");
   })
 </script>
+
+
+
+
+## .csv.parse(data:string)
+```
+documenter.csv.parse(string) 
+```
+
+```
+documenter.readText().then(e=>{
+  main.appendChild(documenter.table( documenter.csv.parse(e)  ))  
+})
+```
