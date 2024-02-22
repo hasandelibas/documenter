@@ -1,15 +1,26 @@
-<script src="documenter.js?v=1.0.2"></script>
+<script src="./documenter-v2"></script>
 <meta charset="utf8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<header body-class="show-menu theme-light">
+<header body-class="show-menu theme-light documenter-admin">
   <a href="../" icon-button documenter-icon-arrow-left></a>
   <div title>📄 Documenter</div>
   <div class="space"></div>
   <input placeholder="Search...">
-  <a href="#">Api</a>
-  <a href="#">App</a>
-  <a href="#logout" icon-button="" style="color:#F44" title="Oturumu Kapat"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M14 12h-4v-12h4v12zm4.213-10.246l-1.213 1.599c2.984 1.732 5 4.955 5 8.647 0 5.514-4.486 10-10 10s-10-4.486-10-10c0-3.692 2.016-6.915 5-8.647l-1.213-1.599c-3.465 2.103-5.787 5.897-5.787 10.246 0 6.627 5.373 12 12 12s12-5.373 12-12c0-4.349-2.322-8.143-5.787-10.246z"></path></svg></a>
+  <button icon-button documenter-icon-fullscreen onclick="document.fullscreenElement == null ? document.documentElement.requestFullscreen() : document.exitFullscreen()"></button>
+
+  <button icon-button documenter-icon-contrast onclick="document.body.classList.toggle('theme-dark');document.body.classList.toggle('theme-light')"></button>
+  <input type="checkbox" switch="🦉" onchange="document.body.classList.remove('theme-dark');document.body.classList.add('theme-light');if(this.checked){ document.body.classList.remove('theme-light');document.body.classList.add('theme-dark'); }" style="font-size:1.42em;">
+  <a hover href="#">Api</a>
+  <a button href="#">App</a>
+  <a href="#logout" icon-button="" documenter-icon-power style="color:#F44" title="Oturumu Kapat"></a>
+  <div panel="bottom-right">
+    <button icon-button documenter-icon-more></button>
+    <panel style="width:200px">
+      Merhaba Burası Bir Panel
+      <input type="checkbox" switch="🦉" onchange="document.body.classList.remove('theme-dark');document.body.classList.add('theme-light');if(this.checked){ document.body.classList.remove('theme-light');document.body.classList.add('theme-dark'); }">
+    </panel>
+  </div>
 </header>
 
 
@@ -41,7 +52,7 @@ A light document application
 
 # 💻 Usage
 ```html
-&lt;script src="//hasandelibas.github.io/documenter/documenter.js">&lt;/script>
+&lt;script src="//hasandelibas.github.io/documenter/documenter-v2.js">&lt;/script>
 <meta charset="utf8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -52,6 +63,7 @@ A light document application
   <input placeholder="Search...">
   <a href="#">Api</a>
   <a href="#">App</a>
+  <button icon-button documenter-icon-more></button>
 </header>
 ```
 
@@ -71,9 +83,28 @@ We can change options in header tag with **body-class** attribute
 <header body-class="hide-header">
 ```
 
+## bottom-header
+* bottom-header
+* top-header
+```html
+<header body-class="bottom-header">
+```
+<button onclick="document.body.classList.remove('top-header');document.body.classList.add('bottom-header');">bottom-header</button>
+<button onclick="document.body.classList.remove('bottom-header');document.body.classList.add('top-header');">top-header</button>
+
 ## theme-dark
 * theme-light
 * theme-dark
+<button onclick="document.body.classList.remove('theme-light');document.body.classList.add('theme-dark');">theme-dark</button>
+<button onclick="document.body.classList.remove('theme-dark');document.body.classList.add('theme-light');">theme-light</button>
+```html
+<header body-class="theme-dark">
+```
+
+
+## theme-round
+* theme-round <span style="opacity:.4">make inputs and buttos round</span>
+<button onclick="document.body.classList.toggle('theme-round');">theme-round</button>
 ```html
 <header body-class="theme-dark">
 ```
@@ -103,19 +134,159 @@ We can change options in header tag with **body-class** attribute
 <header body-class="hide-opener">
 ```
 
+## documenter-admin
+```html
+<header body-class="documenter-admin">
+```
+
+
+# HTML Elements
 
 ## icons
+Example:
+```html
+<span documenter-icon-arrow-left></span>
+```
 
-<table>
-  <tr>
-    <td>
-      <span documenter-icon-arrow-left></span>
-    </td>
-    <td>
-      `<span documenter-icon-arrow-left></span>`
-    </td>
-  </tr>
-</table>
+https://fonts.google.com/icons
+
+<div id="documenter-icon"></div>
+<script>
+  documenter.on("ready",function(){
+    let data = Object.keys( documenter.icons ).map((key)=> ({text: documenter.icons[key].split("<svg").join('<svg fill="currentColor" style="width:1.5em;height:1.5em" '), code:'documenter-icon-'+key }))
+    document.querySelector("#documenter-icon").appendChild( documenter.table(data) )
+  })  
+</script>
+
+## dropdown
+<dropdown name="flag" value="tr" placeholder="Dil Seçiniz" style="min-width:200px;" tabindex="1">
+  <div value="tr"> <img src="https://flagcdn.com/w80/tr.png" style="aspect-ratio:3/2"> Turkish </div>
+  <div value="en"> <img src="https://flagcdn.com/w80/gb.png" style="aspect-ratio:3/2"> English </div>
+  <div value="de"> <img src="https://flagcdn.com/w80/de.png" style="aspect-ratio:3/2"> German </div>
+  <div value="fr"> <img src="https://flagcdn.com/w80/fr.png" style="aspect-ratio:3/2"> French </div>
+  <div value="it"> <img src="https://flagcdn.com/w80/it.png" style="aspect-ratio:3/2"> Italian </div>
+  <div value="es"> <img src="https://flagcdn.com/w80/es.png" style="aspect-ratio:3/2"> Spanish </div>
+  <div value="pt"> <img src="https://flagcdn.com/w80/pt.png" style="aspect-ratio:3/2"> Portuguese </div>
+  <div value="zh"> <img src="https://flagcdn.com/w80/cn.png" style="aspect-ratio:3/2"> Mandarin Chinese </div>
+  <div value="ja"> <img src="https://flagcdn.com/w80/jp.png" style="aspect-ratio:3/2"> Japanese </div>
+  <div value="ru"> <img src="https://flagcdn.com/w80/ru.png" style="aspect-ratio:3/2"> Russian </div>
+  <div value="ar"> <img src="https://flagcdn.com/w80/ae.png" style="aspect-ratio:3/2"> Arabic </div>
+</dropdown>
+
+```
+<dropdown name="flag" value="tr" placeholder="Dil Seçiniz" style="min-width:200px;">
+  <div value="tr"> <img src="https://flagcdn.com/w80/tr.png" style="aspect-ratio:3/2"> Turkish </div>
+  <div value="en"> <img src="https://flagcdn.com/w80/gb.png" style="aspect-ratio:3/2"> English </div>
+  <div value="de"> <img src="https://flagcdn.com/w80/de.png" style="aspect-ratio:3/2"> German </div>
+  <div value="fr"> <img src="https://flagcdn.com/w80/fr.png" style="aspect-ratio:3/2"> French </div>
+  <div value="it"> <img src="https://flagcdn.com/w80/it.png" style="aspect-ratio:3/2"> Italian </div>
+  <div value="es"> <img src="https://flagcdn.com/w80/es.png" style="aspect-ratio:3/2"> Spanish </div>
+  <div value="pt"> <img src="https://flagcdn.com/w80/pt.png" style="aspect-ratio:3/2"> Portuguese </div>
+  <div value="zh"> <img src="https://flagcdn.com/w80/cn.png" style="aspect-ratio:3/2"> Mandarin Chinese </div>
+  <div value="ja"> <img src="https://flagcdn.com/w80/jp.png" style="aspect-ratio:3/2"> Japanese </div>
+  <div value="ru"> <img src="https://flagcdn.com/w80/ru.png" style="aspect-ratio:3/2"> Russian </div>
+  <div value="ar"> <img src="https://flagcdn.com/w80/ae.png" style="aspect-ratio:3/2"> Arabic </div>
+</dropdown>
+```
+
+
+## dropdown multiple
+<dropdown multiple name="flag" value="tr,en" placeholder="Dil Seçiniz" style="min-width:200px;" tabindex="1">
+  <div value="tr"> <img src="https://flagcdn.com/w80/tr.png" style="aspect-ratio:3/2"> Turkish </div>
+  <div value="en"> <img src="https://flagcdn.com/w80/gb.png" style="aspect-ratio:3/2"> English </div>
+  <div value="de"> <img src="https://flagcdn.com/w80/de.png" style="aspect-ratio:3/2"> German </div>
+  <div value="fr"> <img src="https://flagcdn.com/w80/fr.png" style="aspect-ratio:3/2"> French </div>
+  <div value="it"> <img src="https://flagcdn.com/w80/it.png" style="aspect-ratio:3/2"> Italian </div>
+  <div value="es"> <img src="https://flagcdn.com/w80/es.png" style="aspect-ratio:3/2"> Spanish </div>
+  <div value="pt"> <img src="https://flagcdn.com/w80/pt.png" style="aspect-ratio:3/2"> Portuguese </div>
+  <div value="zh"> <img src="https://flagcdn.com/w80/cn.png" style="aspect-ratio:3/2"> Mandarin Chinese </div>
+  <div value="ja"> <img src="https://flagcdn.com/w80/jp.png" style="aspect-ratio:3/2"> Japanese </div>
+  <div value="ru"> <img src="https://flagcdn.com/w80/ru.png" style="aspect-ratio:3/2"> Russian </div>
+  <div value="ar"> <img src="https://flagcdn.com/w80/ae.png" style="aspect-ratio:3/2"> Arabic </div>
+</dropdown>
+
+```
+<dropdown multiple name="flag" value="tr,en" placeholder="Dil Seçiniz" style="min-width:200px;">
+  <div value="tr"> <img src="https://flagcdn.com/w80/tr.png" style="aspect-ratio:3/2"> Turkish </div>
+  <div value="en"> <img src="https://flagcdn.com/w80/gb.png" style="aspect-ratio:3/2"> English </div>
+  <div value="de"> <img src="https://flagcdn.com/w80/de.png" style="aspect-ratio:3/2"> German </div>
+  <div value="fr"> <img src="https://flagcdn.com/w80/fr.png" style="aspect-ratio:3/2"> French </div>
+  <div value="it"> <img src="https://flagcdn.com/w80/it.png" style="aspect-ratio:3/2"> Italian </div>
+  <div value="es"> <img src="https://flagcdn.com/w80/es.png" style="aspect-ratio:3/2"> Spanish </div>
+  <div value="pt"> <img src="https://flagcdn.com/w80/pt.png" style="aspect-ratio:3/2"> Portuguese </div>
+  <div value="zh"> <img src="https://flagcdn.com/w80/cn.png" style="aspect-ratio:3/2"> Mandarin Chinese </div>
+  <div value="ja"> <img src="https://flagcdn.com/w80/jp.png" style="aspect-ratio:3/2"> Japanese </div>
+  <div value="ru"> <img src="https://flagcdn.com/w80/ru.png" style="aspect-ratio:3/2"> Russian </div>
+  <div value="ar"> <img src="https://flagcdn.com/w80/ae.png" style="aspect-ratio:3/2"> Arabic </div>
+</dropdown>
+```
+
+## panel
+<div panel="bottom-left">
+  <button icon-button="" documenter-icon-more></button>
+  <panel style="width:200px;">
+    This is an example panel.
+    Dark Theme: <button icon-button documenter-icon-contrast onclick="document.body.classList.toggle('theme-dark');document.body.classList.toggle('theme-light')"></button>
+  </panel>
+</div>
+
+<div panel="bottom-left">
+  <button>bottom-left</button>
+  <panel style="width:200px;">
+    This is an example panel.
+  </panel>
+</div>
+<div panel="bottom-right">
+  <button>bottom-right</button>
+  <panel style="width:200px;">
+    This is an example panel.
+  </panel>
+</div>
+<div panel="top-left">
+  <button>top-left</button>
+  <panel style="width:200px;">
+    This is an example panel.
+  </panel>
+</div>
+<div panel="top-right">
+  <button>top-right</button>
+  <panel style="width:200px;">
+    This is an example panel.
+  </panel>
+</div>
+```
+<div panel="bottom-left">
+  <button icon-button="" documenter-icon-more=""></button>
+  <panel style="width:200px;">
+    This is an example panel.
+    Dark Theme: <button icon-button documenter-icon-contrast onclick="document.body.classList.toggle('theme-dark');document.body.classList.toggle('theme-light')"></button>
+  </panel>
+</div>
+```
+
+## .hover 
+
+<div padding hover>.hover</div>
+<div padding light>.light</div>
+
+```
+<div hover>.hover</div>
+<div light>.light</div>
+
+<div class="hover">.hover</div>
+<div class="light">.light</div>
+```
+
+## input
+
+checkbox: <input type="checkbox"> 
+```html
+<input type="checkbox"> 
+```
+switch: <input type="checkbox" switch="🦉"> 
+```html
+<input type="checkbox" switch="🦉">
+```
 
 
 # ⚙️ documenter
@@ -185,6 +356,26 @@ documenter.readText().then(text=>console.log(text))
 ```
 
 ## .table( object ) : HTMLTableElement
+<div id="table"></div>
+<script>
+  documenter.on("ready",function(){
+    let table = documenter.table([
+      {name:"John",surname:"Doe",age:26},
+      {name:"Mary",surname:"Doe",age:25}
+    ])
+    document.querySelector("#table").appendChild(table)
+  })
+</script>
+
+<div id="table-props"></div>
+<script>
+  documenter.on("ready",function(){
+    let table = documenter.table({name:"John",surname:"Doe",age:26})
+    document.querySelector("#table-props").appendChild(table)
+  })
+</script>
+
+
 Create table object 
 ```js
 let table = documenter.table([
@@ -192,6 +383,11 @@ let table = documenter.table([
   {name:"Mary",surname:"Doe",age:25}
 ])
 main.appendChild(table)
+```
+
+## .render(html) : HTMLDivElement
+```js
+documenter.render("<div>Hello World!</div>")
 ```
 
 
@@ -230,4 +426,142 @@ documenter.csv.parse(string)
 documenter.readText().then(e=>{
   main.appendChild(documenter.table( documenter.csv.parse(e)  ))  
 })
+```
+
+
+## .select(selector|Element|Element[]) 
+jQuery like selector
+```js
+documenter.select("td").parent("table")
+documenter.select(el).attr("style","color:red")
+documenter.select("tr").list()
+documenter.select("table").find("th").map(e=>console.log(e))
+```
+
+## .TextInput(element,{language:""})
+<div style='outline: var(--front) solid 2px;' id="TextInput">TextInput</div>
+
+Convert element like input element with contenteditable
+* single line
+* no style
+<script>
+  documenter.on("ready",function(){
+    documenter.TextInput(document.querySelector("#TextInput"))    
+  })
+</script>
+```js
+documenter.TextInput(el) // only text
+```
+
+## .TextArea(element, config={})
+<div style='outline: var(--front) solid 2px;' id="TextArea">TextArea</div>
+
+Convert element like with contenteditable
+* allowedElements default is all elements
+* allowedAttributes is default all
+* allowedProperties is default all
+* language is default ""
+<script>
+  documenter.on("ready",function(){
+    documenter.TextArea(document.querySelector("#TextArea"),{
+      allowedElements  : ["br","div","span","img","b","i","u","ul","li","ol","strike","sup","sub"] ,
+      allowedAttributes: ["style","src","alt"],
+      allowedProperties: ["font-weight","text-decoration","color"],
+      language          : "en"
+    })
+  })
+</script>
+```js
+documenter.TextArea(el, {
+  allowedElements  : ["br","div","span","img","b","i","u","ul","li","ol","strike","sup","sub"],
+  allowedAttributes: ["style","src","alt"],
+  allowedProperties: ["font-weight","text-decoration","color"],
+  language         : "en",
+}) // only font-weight and color
+```
+
+
+## .TextEditor(textarea, config={})
+<textarea style='outline: var(--color) solid 2px;' id="TextEditor"><h1>Hello World</h1><p>This is an example for&nbsp;<b>documenter.TextEditor()</b>&nbsp;function.</p></textarea>
+
+Convert textarea element to TextEditor
+<script>
+  documenter.on("ready",function(){
+    let textEditor = documenter.TextEditor(document.querySelector("#TextEditor"),{
+      toolbar           : ["formatBlock","bold","italic","underline","strikeThrough","justifyLeft","justifyCenter","justifyRight","justifyFull","insertUnorderedList","insertOrderedList","space"],
+      head              : "<style> html{font-family:system-ui;background:white;} </style>", // default ""
+      allowedAttributes : ["style","src","alt"], // default all
+      allowedProperties : ["text-align","font-weight","color"], // default all
+      language          : "en",  // default ""
+    })
+    window.textEditor = textEditor
+
+    let listen=document.createElement("button")
+    listen.innerText = "Listen"
+    listen.onclick = function(){
+      let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.language = "tr"
+      recognition.interimResults = true;
+      let last = document.createElement("span")
+      textEditor.body.appendChild(last)
+      recognition.onresult = (e)=>{
+        last.innerText = e.results[0][0].transcript;
+      }
+      recognition.start()
+    }
+    textEditor.toolbar.appendChild( listen )
+
+  })
+</script>
+
+```js
+let textEditor = documenter.TextEditor(document.querySelector("textarea"),{
+  toolbar           : ["formatBlock","bold","italic","underline","strikeThrough","justifyLeft","justifyCenter","justifyRight","justifyFull","insertUnorderedList","insertOrderedList","space"],
+  head              : "<style> html{font-family:system-ui;background:white;} </style>", // default ""
+  allowedAttributes : ["style","src","alt"], // default all
+  allowedProperties : ["text-align","font-weight","color"], // default all
+  language          : "en",  // default ""
+})
+```
+
+**Custom Toolbar Item ** with ``texteditor.toolbar``
+```js
+let listen=document.createElement("button")
+listen.innerText = "Listen"
+listen.onclick = function(){
+  let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.language = "tr"
+  recognition.interimResults = true;
+  let last = document.createElement("span")
+  textEditor.body.appendChild(last)
+  recognition.onresult = (e)=>{
+    last.innerText = e.results[0][0].transcript;
+  }
+  recognition.start()
+}
+textEditor.toolbar.appendChild( listen )
+```
+
+**Get Value**
+```js
+textEditor.value // set or get
+```
+
+
+## .lss( css_code )
+
+```js
+documenter.lss("
+@mobile{
+  body{
+    background:#000;
+    *{
+      color:#222;
+    }
+    h2{
+      color:#333;
+    }
+  }
+}
+")
 ```
