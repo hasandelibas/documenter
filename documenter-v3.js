@@ -390,7 +390,7 @@
     input:not([type=checkbox]):not([type=radio]),textarea,select,dropdown,.input{
       outline: none;
       text-decoration: none;
-      background: #8882;
+      /* background: #8882; */
       box-shadow:inset 0px 0px 0px 2px #8882;
       opacity: .8;
     }
@@ -2038,7 +2038,7 @@ Element.prototype.empty = function(){
       while ((mat = code.matchRequirsive("{", "}"))) {
         // Tag bul
         // Ara Kodu varsa dataya ekle
-        // tagÄ± deÄŸiÅŸtir tekrar requirsive olarak git
+        // tagı değiştir tekrar requirsive olarak git
         // buradan devam et.
         var tag = "";
         var dotIndex = code.lastIndexOf(";", mat[2]);
@@ -2199,7 +2199,7 @@ Element.prototype.empty = function(){
     e.appendChild(value)
     e.appendChild(list)
     e.tabIndex = 1;
-    // VarsayÄ±lan SeÃ§enek
+    // Varsayılan Seçenek
     select.value = e.getAttribute("value")
     update();
   }
