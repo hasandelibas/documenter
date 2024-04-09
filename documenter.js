@@ -164,13 +164,14 @@
       align-items:center;
     }
     /*-------------------------------------------------------------------------------------------*/
+    
 
     body{
       font-family: 'Ubuntu', sans-serif;
       font-family: 'Segoe UI', Tahoma, sans-serif;
       max-width:960px;
       margin:auto;
-      padding-top:50px;
+      padding-top:var(--header-height,50px);
       line-height:1.5;
       font-size:16px;
       --front:#222;
@@ -180,6 +181,7 @@
       --light: #8882;
       --light: color-mix(in srgb, var(--back) 85%, var(--front));
       --menu-width: 260px;
+      --header-height:50px;
       color:var(--front);
       background:var(--back);
     }
@@ -195,7 +197,7 @@
     content{
       display:block;
       position:fixed;
-      top:50px;
+      top:var(--header-height,50px);
       left:0;
       right:0;
       bottom:0;
@@ -209,7 +211,7 @@
       top: 0;
       right: 0;
       width: 100%;
-      height: 50px;
+      height: var(--header-height,50px);
       display: flex;
       align-items: center;
       padding: 0px 10px;
@@ -628,7 +630,7 @@
     }
 
     body.hide-header header{
-      top: -50px; 
+      top: calc( var(--header-height,50px) * -1 ); 
       opacity: 0;
     }
     body.hide-header content{
@@ -641,7 +643,7 @@
     }
     body.bottom-header content{
       top:0;
-      bottom:50px;
+      bottom:var(--header-height,50px);
     }
 
 
