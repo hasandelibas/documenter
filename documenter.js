@@ -390,7 +390,7 @@
     input:not([type=checkbox]):not([type=radio]),textarea,select,dropdown,.input{
       outline: none;
       text-decoration: none;
-      /* background: #8882; */
+      background: #8882;
       box-shadow:inset 0px 0px 0px 2px #8882;
       opacity: .8;
     }
