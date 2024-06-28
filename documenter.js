@@ -2237,7 +2237,7 @@ body{
       while ((mat = code.matchRequirsive("{", "}"))) {
         // Tag bul
         // Ara Kodu varsa dataya ekle
-        // tagÄ± deÄŸiÅŸtir tekrar requirsive olarak git
+        // tagı değiştir tekrar requirsive olarak git
         // buradan devam et.
         var tag = "";
         var dotIndex = code.lastIndexOf(";", mat[2]);
@@ -2398,7 +2398,7 @@ body{
     e.appendChild(value)
     e.appendChild(list)
     e.tabIndex = 1;
-    // VarsayÄ±lan SeÃ§enek
+    // Varsayılan Seçenek
     select.value = e.getAttribute("value")
     update();
   }
