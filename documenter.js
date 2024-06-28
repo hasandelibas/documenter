@@ -1,4 +1,5 @@
 (function(){
+
   let main = new URL( document.currentScript.src )
   let parameters = main.parameters = (() => {
     var params = main.search.substring(1).split("&");
@@ -9,12 +10,62 @@
     }
     return obj;
   })();
-
+  
 
   window.md5 = function(d){var r = M(V(Y(X(d),8*d.length)));return r.toLowerCase()};function M(d){for(var _,m="0123456789ABCDEF",f="",r=0;r<d.length;r++)_=d.charCodeAt(r),f+=m.charAt(_>>>4&15)+m.charAt(15&_);return f}function X(d){for(var _=Array(d.length>>2),m=0;m<_.length;m++)_[m]=0;for(m=0;m<8*d.length;m+=8)_[m>>5]|=(255&d.charCodeAt(m/8))<<m%32;return _}function V(d){for(var _="",m=0;m<32*d.length;m+=8)_+=String.fromCharCode(d[m>>5]>>>m%32&255);return _}function Y(d,_){d[_>>5]|=128<<_%32,d[14+(_+64>>>9<<4)]=_;for(var m=1732584193,f=-271733879,r=-1732584194,i=271733878,n=0;n<d.length;n+=16){var h=m,t=f,g=r,e=i;f=md5_ii(f=md5_ii(f=md5_ii(f=md5_ii(f=md5_hh(f=md5_hh(f=md5_hh(f=md5_hh(f=md5_gg(f=md5_gg(f=md5_gg(f=md5_gg(f=md5_ff(f=md5_ff(f=md5_ff(f=md5_ff(f,r=md5_ff(r,i=md5_ff(i,m=md5_ff(m,f,r,i,d[n+0],7,-680876936),f,r,d[n+1],12,-389564586),m,f,d[n+2],17,606105819),i,m,d[n+3],22,-1044525330),r=md5_ff(r,i=md5_ff(i,m=md5_ff(m,f,r,i,d[n+4],7,-176418897),f,r,d[n+5],12,1200080426),m,f,d[n+6],17,-1473231341),i,m,d[n+7],22,-45705983),r=md5_ff(r,i=md5_ff(i,m=md5_ff(m,f,r,i,d[n+8],7,1770035416),f,r,d[n+9],12,-1958414417),m,f,d[n+10],17,-42063),i,m,d[n+11],22,-1990404162),r=md5_ff(r,i=md5_ff(i,m=md5_ff(m,f,r,i,d[n+12],7,1804603682),f,r,d[n+13],12,-40341101),m,f,d[n+14],17,-1502002290),i,m,d[n+15],22,1236535329),r=md5_gg(r,i=md5_gg(i,m=md5_gg(m,f,r,i,d[n+1],5,-165796510),f,r,d[n+6],9,-1069501632),m,f,d[n+11],14,643717713),i,m,d[n+0],20,-373897302),r=md5_gg(r,i=md5_gg(i,m=md5_gg(m,f,r,i,d[n+5],5,-701558691),f,r,d[n+10],9,38016083),m,f,d[n+15],14,-660478335),i,m,d[n+4],20,-405537848),r=md5_gg(r,i=md5_gg(i,m=md5_gg(m,f,r,i,d[n+9],5,568446438),f,r,d[n+14],9,-1019803690),m,f,d[n+3],14,-187363961),i,m,d[n+8],20,1163531501),r=md5_gg(r,i=md5_gg(i,m=md5_gg(m,f,r,i,d[n+13],5,-1444681467),f,r,d[n+2],9,-51403784),m,f,d[n+7],14,1735328473),i,m,d[n+12],20,-1926607734),r=md5_hh(r,i=md5_hh(i,m=md5_hh(m,f,r,i,d[n+5],4,-378558),f,r,d[n+8],11,-2022574463),m,f,d[n+11],16,1839030562),i,m,d[n+14],23,-35309556),r=md5_hh(r,i=md5_hh(i,m=md5_hh(m,f,r,i,d[n+1],4,-1530992060),f,r,d[n+4],11,1272893353),m,f,d[n+7],16,-155497632),i,m,d[n+10],23,-1094730640),r=md5_hh(r,i=md5_hh(i,m=md5_hh(m,f,r,i,d[n+13],4,681279174),f,r,d[n+0],11,-358537222),m,f,d[n+3],16,-722521979),i,m,d[n+6],23,76029189),r=md5_hh(r,i=md5_hh(i,m=md5_hh(m,f,r,i,d[n+9],4,-640364487),f,r,d[n+12],11,-421815835),m,f,d[n+15],16,530742520),i,m,d[n+2],23,-995338651),r=md5_ii(r,i=md5_ii(i,m=md5_ii(m,f,r,i,d[n+0],6,-198630844),f,r,d[n+7],10,1126891415),m,f,d[n+14],15,-1416354905),i,m,d[n+5],21,-57434055),r=md5_ii(r,i=md5_ii(i,m=md5_ii(m,f,r,i,d[n+12],6,1700485571),f,r,d[n+3],10,-1894986606),m,f,d[n+10],15,-1051523),i,m,d[n+1],21,-2054922799),r=md5_ii(r,i=md5_ii(i,m=md5_ii(m,f,r,i,d[n+8],6,1873313359),f,r,d[n+15],10,-30611744),m,f,d[n+6],15,-1560198380),i,m,d[n+13],21,1309151649),r=md5_ii(r,i=md5_ii(i,m=md5_ii(m,f,r,i,d[n+4],6,-145523070),f,r,d[n+11],10,-1120210379),m,f,d[n+2],15,718787259),i,m,d[n+9],21,-343485551),m=safe_add(m,h),f=safe_add(f,t),r=safe_add(r,g),i=safe_add(i,e)}return Array(m,f,r,i)}function md5_cmn(d,_,m,f,r,i){return safe_add(bit_rol(safe_add(safe_add(_,d),safe_add(f,i)),r),m)}function md5_ff(d,_,m,f,r,i,n){return md5_cmn(_&m|~_&f,d,_,r,i,n)}function md5_gg(d,_,m,f,r,i,n){return md5_cmn(_&f|m&~f,d,_,r,i,n)}function md5_hh(d,_,m,f,r,i,n){return md5_cmn(_^m^f,d,_,r,i,n)}function md5_ii(d,_,m,f,r,i,n){return md5_cmn(m^(_|~f),d,_,r,i,n)}function safe_add(d,_){var m=(65535&d)+(65535&_);return(d>>16)+(_>>16)+(m>>16)<<16|65535&m}function bit_rol(d,_){return d<<_|d>>>32-_}
   window.$  = window.$ || ((e,s=document)=>s.querySelector(e))
   window.$$ = window.$$ || ((e,s=document)=>Array.from(s.querySelectorAll(e)))
 
+
+  /* mobile-style="margin-top:20px;" desktop-style="padding:4em;" hover-style="color:red;"   */
+  ;(function(){
+    document.addEventListener("DOMContentLoaded",function(){
+      let $$ = (e)=>Array.from(document.querySelectorAll(e))
+      let mobileIndex = 0;
+      $$('[mobile-style]').map(function(el){
+        el.setAttribute('mobile-style-index',mobileIndex++);
+        let css = `
+        @media screen and (max-width: 600px) {
+          [mobile-style-index="${el.getAttribute('mobile-style-index')}"] {
+            ${el.getAttribute('mobile-style')}
+          }
+        }
+        `;
+        let style = document.createElement("style");
+        style.innerHTML = css;
+        document.head.append(style);
+      })
+
+      let desktopIndex = 0;
+      $$('[desktop-style]').map(function(el){
+        el.setAttribute('desktop-style-index', desktopIndex++);
+        let css = `
+        @media screen and (min-width: 601px) {
+          [desktop-style-index="${el.getAttribute('desktop-style-index')}"] {
+            ${el.getAttribute('desktop-style')}
+          }
+        }
+        `;
+        let style = document.createElement("style");
+        style.innerHTML = css;
+        document.head.append(style);
+      });
+      
+      let hoverIndex = 0;
+      $$('[hover-style]').map(function(el){
+        el.setAttribute('hover-style-index',hoverIndex++);
+        let css = `
+          [hover-style-index="${el.getAttribute('hover-style-index')}"]:hover {
+            ${el.getAttribute('hover-style')}
+          }
+        `;
+        let style = document.createElement("style");
+        style.innerHTML = css;
+        document.head.append(style);
+      })
+
+    })
+  })();
 
 
   let libraries = `
@@ -57,23 +108,37 @@
       justify-content: center;
     }
     
-  
+    
     .grid-2,[grid-2]{
       display:grid;
-      grid-template-columns:repeat(2,50%);
-      gap:0!important;/* Use Padding in Child */
+      grid-template-columns:repeat(2,1fr);
     }
     .grid-3,[grid-3]{
       display:grid;
-      grid-template-columns:repeat(3,33.33%);
-      gap:0!important;/* Use Padding in Child */
+      grid-template-columns:repeat(3,1fr);
     }
     .grid-4,[grid-4]{
       display:grid;
-      grid-template-columns:repeat(4,25%);
-      gap:0!important;/* Use Padding in Child */
+      grid-template-columns:repeat(4,1fr);
     }
-    
+    .grid-5,[grid-5]{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+    }
+    .grid-6,[grid-6]{
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+    }
+
+    .grid-2 > *,[grid-2] > *,
+    .grid-3 > *,[grid-3] > *,
+    .grid-4 > *,[grid-4] > *,
+    .grid-5 > *,[grid-5] > *,
+    .grid-6 > *,[grid-6] > *{
+      overflow:hidden;
+      word-wrap: break-word;
+    }
+
     body [grid-form]{
       display:grid;
       grid-template-columns: 200px 1fr;
@@ -187,7 +252,7 @@
     }
     body.theme-dark{
       --front:#FFF;
-      --back:#222;
+      --back:#181818;
       color-scheme: dark;
     }
     body.theme-light{
@@ -377,7 +442,8 @@
     button,.button,[button],input:not([type=checkbox]):not([type=radio]),textarea,select,dropdown,.input{
       display:inline-block;
       padding:6px 12px;
-      margin:2px;
+      margin:0 2px;
+      margin:0;
       border:none;
       font-size:16px;
       line-height:1.5;
@@ -416,7 +482,7 @@
 
     
     .preview,[preview]{
-      padding: 4px;
+      padding: 0px;
       padding-top: 2.4em;
       position: relative;
       margin: 4px 0;
@@ -857,8 +923,6 @@
 
   documenter_admin_css = `
 
-
-
 .box{
   background: var(--back);
   display: inline-block;
@@ -870,7 +934,9 @@
 }
 
 
-body.documenter-admin{
+/* body.documenter-admin{ */
+
+body{
   
   *{box-sizing:border-box;}
 
@@ -951,10 +1017,12 @@ body.documenter-admin{
       width:1;
     }
     [actions] div{
-      display:flex;
+      display: flex;
       flex-direction: row;
       gap: 2px;
-      padding:0px;
+      padding: 0 2px;
+      align-items: center;
+      justify-content: center;
     }
     [actions] div button{
       display:flex;
@@ -986,18 +1054,13 @@ body.documenter-admin{
 
 
 
-Element.prototype.empty = function(){
-  while(this.firstChild){
-    this.removeChild(this.firstChild)
+  Element.prototype.empty = function(){
+    while(this.firstChild){
+      this.removeChild(this.firstChild)
+    }
   }
-}
-  // Parser
-  let parser = new DOMParser();
-  let html = parser.parseFromString(libraries, "text/html");
   
-  // Append Libraries
-  document.head.append(...html.head.children);
-
+  
 
   /**
    * Search requirsively charcater, if found: return
@@ -1128,15 +1191,27 @@ Element.prototype.empty = function(){
   
   }
 
-  
+
+  if(parameters["disable-style"]==null){
+    // Append Libraries
+    let html = (new DOMParser()).parseFromString(libraries, "text/html");
+    document.head.append(...html.head.children);
+  }
+
   document.addEventListener("DOMContentLoaded", Render)
 
 
   function Render(){
     let header = document.body.querySelector("header")
+
+    if(parameters["disable-html"]!=null) return document.body.style.opacity="1"
+
+    if(!header) return document.body.style.opacity="1"
+
     if(header){
       document.body.className += header.getAttribute("body-class")
       header.remove()
+
 
       // menu-opener
       let contains = header.getAttribute("body-class") && header.getAttribute("body-class").indexOf("hide-menu") > -1 
@@ -1158,7 +1233,9 @@ Element.prototype.empty = function(){
     let menu    = document.createElement("menu")
     let main    = document.createElement("main")
     let content = document.createElement("content")
-    
+
+
+  
     main.innerHTML = MarkdownConverter(document.body.innerHTML)
     main.id="main"
     document.body.empty()
@@ -1166,9 +1243,10 @@ Element.prototype.empty = function(){
     let h1_index = -1
     Array.from(main.querySelectorAll("h1,h2")).map(e=>{
       let a = document.createElement("a")
-      e.id = e.innerText.trim().split(/\s+/).join("-")
+      const innerText = Array.from(e.childNodes).filter(node => node.nodeType === Node.TEXT_NODE).map(node => node.textContent.trim()).join(' ').trim().split(/\s+/).join(" ");
+      e.id = innerText.split(/\s+/).join("-")
       a.href = "#" + e.id  
-      a.innerText = e.innerText
+      a.innerText = innerText
       a.className = "menu-"+e.tagName
       /*
       let onclick = 'Array.from(document.querySelectorAll("menu a")).map(e=>e.classList.remove("active"));this.classList.add("active");if(window.innerWidth<600){document.body.classList.add("hide-menu")};'
@@ -1182,7 +1260,7 @@ Element.prototype.empty = function(){
       menu.appendChild(a)
     })
 
-    documenter.on("click","a[href",function(){
+    documenter.on("click","a[href]",function(){
         
       if(!this.getAttribute("href").startsWith("#")) return;
 
@@ -1192,7 +1270,7 @@ Element.prototype.empty = function(){
       if(leftMenuButton==null) return;
       leftMenuButton.classList.add("active")
       if(window.innerWidth<600){
-        document.body.classList.add("hide-menu")
+        document.body.classList.add("menu-hide")
       };
 
       // Select If Tab System
@@ -1226,7 +1304,7 @@ Element.prototype.empty = function(){
     content.appendChild(main)
     document.body.appendChild(content)
     if(header) document.body.prepend(header)
- 
+
     // Remove first <br> in main
     while(main.firstElementChild && main.firstElementChild.tagName.toUpperCase()=="BR"){ main.firstElementChild.remove() }
     // Title
@@ -1263,6 +1341,7 @@ Element.prototype.empty = function(){
       document.head.prepend(title)
     }
 
+
     // [documenter-icon-x]
     // https://fonts.google.com/icons
     let icons = {
@@ -1282,7 +1361,6 @@ Element.prototype.empty = function(){
     }
     documenter.icons = icons;
 
-
     // Tab System
     if(document.body.classList.contains("tab-system")){
       var target = null
@@ -1301,7 +1379,6 @@ Element.prototype.empty = function(){
     var target = Array.from(document.body.querySelectorAll("[id]")).find(e=>e.id==decodeURIComponent(location.hash).substr(1))
     if(target) target.scrollIntoView();
   
-    
     // documenter-admin
     let style = document.createElement("style")
     style.innerHTML = documenter.lss(documenter_admin_css)
@@ -1322,7 +1399,10 @@ Element.prototype.empty = function(){
   })
   
 
-
+  //// ============================ documenter ============================ ////
+  //// ============================ documenter ============================ ////
+  //// ============================ documenter ============================ ////
+  //// ============================ documenter ============================ ////
   window.documenter = {}
   let succesTimeout = null
 
@@ -1332,7 +1412,10 @@ Element.prototype.empty = function(){
     if(progressElement){
       progressElement.className = ""
     }
-    if(progressElement) return;
+    if(progressElement){
+      if(document.body) document.body.prepend(progressElement)
+      return
+    }
     progressElement = document.createElement("div")
     progressElement.style.position="fixed";
     progressElement.style.top  = "0px"
@@ -1341,7 +1424,7 @@ Element.prototype.empty = function(){
     progressElement.style.zIndex  = "100"
 
     //if(document.querySelector("header")) document.querySelector("header").appendChild(progressElement)
-    document.body.prepend(progressElement)
+    if(document.body) document.body.prepend(progressElement)
 
     let css=`
       @keyframes documenter-breathe {
@@ -1477,6 +1560,41 @@ Element.prototype.empty = function(){
     document.body.removeChild(element);
   }
 
+  
+  documenter.info = function(text){
+    let div = documenter.info.element 
+    if(!div) div = documenter.info.element = document.createElement("div")
+    
+    div.setAttribute("documenter-info","")
+    div.id = "documenter-info-id-"+documenter.info.id
+    div.style.position = "fixed";
+    div.style.left  = "20px"
+    div.style.maxWidth = "calc(100% - 40px)"
+    div.style.bottom = "20px"
+    div.style.fontFamily = "monospace"
+    div.style.whiteSpace = "pre"
+    
+    div.style.zIndex = "9999"
+    
+    div.style.background = "#000"
+    div.style.color     = "white"
+    div.style.borderRadius = "10px"
+    div.style.padding ="1em"
+    div.style.opacity = "1"
+    div.style.transform = "translateX(0)"
+    div.style.transition = "transform .5s, opacity .5s, bottom 0.5s";
+    div.innerHTML = text
+    
+    if(documenter.info.timeout) clearTimeout(documenter.info.timeout)
+    documenter.info.timeout = setTimeout(e=>{
+      setTimeout(e=>div.remove(),1000)
+      div.style.transform = "translate(-100%)";
+      div.style.opacity = "0";
+    },6000) 
+    document.body.appendChild(div)
+    return div;
+  }
+
   documenter.message = function(text){
     if(documenter.message.id == null) documenter.message.id = 0
     documenter.message.id++ 
@@ -1551,6 +1669,26 @@ Element.prototype.empty = function(){
     })
   }
   
+  documenter.readImage = function(){
+    return new Promise((res, rej) => {
+      let input = document.createElement("input");
+      input.type = "file";
+      input.accept = "image/*"; // This will ensure only image files can be selected
+      input.oninput = function(event){
+        var reader = new FileReader();
+        reader.onload = function() {
+          var imageDataUrl = reader.result;
+          res(imageDataUrl);
+        };
+        reader.onerror = function(error) {
+          rej(error);
+        };
+        reader.readAsDataURL(input.files[0]);
+      };
+      input.click();
+    });
+  }
+
   documenter.table = function(data){
     function c(tag,attr={},html="",parent=null){
       let el = document.createElement(tag)
@@ -1592,6 +1730,25 @@ Element.prototype.empty = function(){
     }
   }
 
+
+  documenter.modal = function(text=""){
+    const render = function(html){
+      var mime = html.indexOf("xmlns=") == -1 ? "text/html" : "image/svg+xml";   
+      var parsed= render.parser.parseFromString(html, mime);
+      return mime=="text/html" ? parsed.body.firstChild : parsed.firstChild;
+    }
+    render.parser = new DOMParser();
+    let parent = render("<div style='position:fixed;left:0;top:0;width:100%;height:100%;background:#8888;z-index:20;backdrop-filter:blur(2px);' documenter-modal><div documenter-modal-content style='margin: 2em auto;position: relative;background: var(--back,#FFF);border-radius: 1em;max-width: calc(100% - 4em);max-height: calc(100% - 4em);top: calc(50% - 2em);transform: translate(0, -50%);width: calc(100% - 5em);box-shadow:0px 0px 10px #888C;display:flex;'><div documenter-modal-content-text style='padding:1em;overflow-y:auto;flex:1;'</div></div></div>")
+    parent.firstElementChild.firstElementChild.innerHTML = text
+    document.body.appendChild(parent)
+    let close = render("<div hover light documenter-modal-close style='position: absolute;right: 0;top: 0;background: var(--back);border-radius: 100px;padding: 8px;transform: translate(50%, -50%);line-height: 0;'></div>")
+    close.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="currentColor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>'
+    parent.firstElementChild.appendChild(close)
+    console.log(parent)
+    close.onclick = ()=>parent.remove();
+    return parent
+  }
+
   documenter.render = function(html){
     var mime = html.indexOf("xmlns=") == -1 ? "text/html" : "image/svg+xml";   
     var parsed= documenter.render.parser.parseFromString(html, mime);
@@ -1599,30 +1756,33 @@ Element.prototype.empty = function(){
   }
   documenter.render.parser = new DOMParser();
 
-  documenter.on = function(event,selector,fn){
-    if(event=="ready") event = "DOMContentLoaded"
+  documenter.on = function(events,selector,fn){
+    if(events=="ready") events = "DOMContentLoaded"
     if(fn==null && selector instanceof Function){
       fn = selector
       selector = false
     }
-    document.addEventListener(event,function(e){
-      if(selector==false){
-        return fn.bind(document)(e)
-      }
-      let els = e.composedPath();
-      for( el of els ){
-        if( el instanceof Document ) continue;
-        if( el instanceof Window ) continue;
-        if( el.matches(selector) ){
-          fn.bind(el)(e)
+    events.split(",").map(e=>e.trim()).map(event=>{
+      document.addEventListener(event,function(e){
+        if(selector==false){
+          return fn.bind(document)(e)
         }
-      }
+        let els = e.composedPath();
+        for( el of els ){
+          if( el instanceof Document ) continue;
+          if( el instanceof Window ) continue;
+          if( el.matches(selector) ){
+            fn.bind(el)(e)
+          }
+        }
+      })
     })
   }
 
     
   documenter.csv = {}
   documenter.csv.parse = function(text){
+    text += "\n";
     let len = text.length;
     let rows = [];
     let list = [];
@@ -1657,10 +1817,20 @@ Element.prototype.empty = function(){
       }
       data += char 
     }
+    if(rows[rows.length-1].length==0) rows.pop()
     return rows
   }
 
 
+
+  documenter.parent = function(el,tag){
+    el = el.parentElement
+    while(!el.matches(tag)){
+      el = el.parentElement
+      if(el.parentElement==null) break
+    }
+    return el
+  }
 
 
   documenter.select = function(selector){
@@ -1742,8 +1912,17 @@ Element.prototype.empty = function(){
       if(child.nodeType == 1){
         Text__AllowedProperties(child, attributes);
         Array.from(child.style).map(e=>{
-          console.log(e)
-          if(attributes.indexOf(e)==-1){
+          let have = false;
+          for(let attribute of attributes){
+            if(e.startsWith(attribute)){
+              have = true;
+              break;
+            }
+          }
+          /*if(attributes.indexOf(e)==-1){
+            child.style.setProperty(e,null)
+          }*/
+          if(have==false){
             child.style.setProperty(e,null)
           }
         })
@@ -1792,6 +1971,9 @@ Element.prototype.empty = function(){
       Text__AllowedAttributes(element,[])
       Text__AllowedProperties(element,[])
     })
+    Object.defineProperty(element,"value",{
+      get:e=>element.innerText
+    })
   }
     
   documenter.TextArea = function(element,config={allowedAttributes:null,allowedProperties:null,allowedElements:null}){
@@ -1810,12 +1992,20 @@ Element.prototype.empty = function(){
   /**
    * Config: 
    *  head
+   *  toolbar           : 
    *  allowedProperties : []
    *  allowedAttributes : [] 
    */
   documenter.TextEditor = function(textarea,config={}){
-    let textEditor = {textarea:textarea}
+    
 
+    config.head = config.head ? config.head : documenter.TextEditor.head
+    config.toolbar = config.toolbar ? config.toolbar : documenter.TextEditor.toolbar
+    config.allowedProperties = config.allowedProperties ? config.allowedProperties : documenter.TextEditor.allowedProperties
+    config.allowedAttributes = config.allowedAttributes ? config.allowedAttributes : documenter.TextEditor.allowedAttributes
+    config.language = config.language ? config.language : documenter.TextEditor.language
+
+    let textEditor = {textarea:textarea,config:config}
     let toolbarHTML = {
       "formatBlock"         : '<select command="formatBlock" tabindex="-1"><option value="h1">Header 1</option><option value="h2">Header 2</option><option value="h3">Header 3</option><option value="p">Paragraph</option><option value="pre">Quotation</option><option value="div">Division</option></select>',
       "bold"                : '<div command="bold"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path fill="currentColor" d="M272-200v-560h221q65 0 120 40t55 111q0 51-23 78.5T602-491q25 11 55.5 41t30.5 90q0 89-65 124.5T501-200H272Zm121-112h104q48 0 58.5-24.5T566-372q0-11-10.5-35.5T494-432H393v120Zm0-228h93q33 0 48-17t15-38q0-24-17-39t-44-15h-95v109Z"/></svg></div>',
@@ -1997,6 +2187,13 @@ Element.prototype.empty = function(){
     return textEditor
   }
 
+  documenter.TextEditor.head              = "<style>body{}</style>"
+  documenter.TextEditor.toolbar           = ["formatBlock","bold","italic","underline","strikeThrough","justifyLeft","justifyCenter","justifyRight","justifyFull","insertUnorderedList","insertOrderedList","space"]
+  documenter.TextEditor.allowedProperties = ["font-weight","font-style"]
+  documenter.TextEditor.allowedAttributes = ["style","src","alt"]
+  documenter.TextEditor.language          = "en"
+  
+
 
   documenter.Iframe = function(content){
     let iframe = document.createElement("iframe");
@@ -2040,7 +2237,7 @@ Element.prototype.empty = function(){
       while ((mat = code.matchRequirsive("{", "}"))) {
         // Tag bul
         // Ara Kodu varsa dataya ekle
-        // tagı değiştir tekrar requirsive olarak git
+        // tagÄ± deÄŸiÅŸtir tekrar requirsive olarak git
         // buradan devam et.
         var tag = "";
         var dotIndex = code.lastIndexOf(";", mat[2]);
@@ -2201,7 +2398,7 @@ Element.prototype.empty = function(){
     e.appendChild(value)
     e.appendChild(list)
     e.tabIndex = 1;
-    // Varsayılan Seçenek
+    // VarsayÄ±lan SeÃ§enek
     select.value = e.getAttribute("value")
     update();
   }
@@ -2216,6 +2413,63 @@ Element.prototype.empty = function(){
   if(document.documentElement.requestFullscreen==null && document.documentElement.webkitRequestFullscreen){
     document.documentElement.requestFullscreen = document.documentElement.webkitRequestFullscreen
   }
+  
+
+    
+
+  documenter.see = function(selector, process, order){
+
+    let triggers = []
+    documenter.see = function (selector, process, order) {
+      triggers.push({
+        selector,
+        process,
+        order
+      });
+    }
+    documenter.see(selector, process, order);
+
+    document.addEventListener('DOMContentLoaded', function () {
+      function Check(nodes) {
+        for (const node of nodes) {
+          if(node.nodeType===Node.ELEMENT_NODE){
+            for (const trigger of triggers) {
+              let selector = trigger.selector;
+              if (node.matches(selector)) trigger.process.apply(node, [node]);
+              if (node.querySelectorAll(selector).length > 0) {
+                for (const el of node.querySelectorAll(selector)) {
+                  trigger.process.apply(el, [el]);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      var observer = new MutationObserver((mutations) => {
+        mutations = mutations.sort((a, b) => {
+          return b.type.localeCompare(a.type)
+        })
+        for (const m of mutations) {
+          if (m.type == "childList") {
+            let nodes = m.addedNodes;
+            Check(nodes);
+          }
+        }
+      });
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+      Check([document.body]);
+    })
+  }
+
+
+  
+  
+  
+
   
 
 })()
