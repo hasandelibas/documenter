@@ -1,4 +1,4 @@
-<script src="./documenter-v3.js"></script>
+<script src="//apps.asenax.com/documenter/documenter.js"></script>
 <meta charset="utf8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -22,6 +22,32 @@
     </panel>
   </div>
 </header>
+
+
+# 💻 Usage
+
+```html
+&lt;script src="//hasandelibas.github.io/documenter/documenter.js">&lt;/script>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<header body-class="show-menu theme-light">
+  <a href="../" icon-button documenter-icon-arrow-left></a>
+  <div title>📄 Documenter</div>
+  <div class="space"></div>
+  <input placeholder="Search...">
+  <a href="#">Api</a>
+  <a href="#">App</a>
+  <button icon-button documenter-icon-more></button>
+</header>
+```
+
+```html
+&lt;!--               disable-style              -->
+&lt;script src="//apps.asenax.com/documenter/documenter.js?disable-style=true">&lt;/script>
+&lt;!--               disable-html               -->
+&lt;script src="//apps.asenax.com/documenter/documenter.js?disable-html=true">&lt;/script>
+```
 
 
 # 📄 Documenter
@@ -49,23 +75,6 @@ A light document application
 + left Menu click fix
 + Make pre code 14px
 + light theme input problem
-
-# 💻 Usage
-```html
-&lt;script src="//hasandelibas.github.io/documenter/documenter-v3.js">&lt;/script>
-<meta charset="utf8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<header body-class="show-menu theme-light">
-  <a href="../" icon-button documenter-icon-arrow-left></a>
-  <div title>📄 Documenter</div>
-  <div class="space"></div>
-  <input placeholder="Search...">
-  <a href="#">Api</a>
-  <a href="#">App</a>
-  <button icon-button documenter-icon-more></button>
-</header>
-```
 
 # 🔨 Options
 We can change options in header tag with **body-class** attribute
@@ -277,6 +286,38 @@ https://fonts.google.com/icons
 <div button documenter-icon-more="" tooltip-bottom="[tooltip-bottom]"></div> 
 ```
 
+[tooltip-left] : <div button documenter-icon-more="" tooltip-left="[tooltip-left]"></div> 
+```html
+<div button documenter-icon-more="" tooltip-left="[tooltip-left]"></div> 
+```
+
+[tooltip-top] : <div button documenter-icon-more="" tooltip-top="[tooltip-top]"></div> 
+
+```html
+<div button documenter-icon-more="" tooltip-top="[tooltip-top]"></div> 
+```
+
+
+## [mobile-style]
+
+```html
+&lt;div mobile-style="margin-top:20px;" desktop-style="padding:4em;" hover-style="color:red;"> Example &lt;div>
+```
+
+
+## [desktop-style]
+
+```html
+&lt;div mobile-style="margin-top:20px;" desktop-style="padding:4em;" hover-style="color:red;"> Example &lt;div>
+```
+
+
+## [hover-style]
+
+```html
+&lt;div mobile-style="margin-top:20px;" desktop-style="padding:4em;" hover-style="color:red;"> Example &lt;div>
+```
+
 
 ## .hover 
 
@@ -349,10 +390,23 @@ documenter.load("world_map.pdf").then(e=>e.blob()).then(function(text){
 ```
 documenter.post("url",{name:'John'}).then(e=>e.text())
 ```
+
+## .submit(HTMLFormElement)
+```
+documenter.submit(HTMLFormElement)
+```
+
+
 ## .download(string|blob,filename)
 ```
 documenter.download("Hello World","test.txt")
 ```
+
+## .info(string) : HTMLDivElement
+
+<button onclick="documenter.info('Hello World!')"> documenter.info("Hello World!") </button>
+<button onclick="documenter.info('Hello!')"> documenter.info("Hello!") </button>
+
 
 ## .message(string) : HTMLDivElement
 
@@ -362,11 +416,30 @@ documenter.download("Hello World","test.txt")
 documenter.message("Hello World!")
 ```
 
+## .modal(text) : HTMLDivElement
+
+<button onclick="documenter.modal('Title &lt;br&gt; This is modal text.')">documenter.modal('Title &lt;br&gt; This is modal text.')</button>
+
+```js
+documenter.modal("Title &lt;br&gt; This is modal text."")
+```
+
+
+
+
 ## .readText() : Promise(e:String)
 Select file and read as text.
 <button onclick="documenter.readText().then(text=>console.log(text))"> documenter.readText().then(text=>console.log(text)) </button>
 ```js
 documenter.readText().then(text=>console.log(text))
+```
+
+## .readImage() : Promise(e:String)
+Select file and read as text.
+<img id="read-image" src="" style="max-width: 100%;">
+<button onclick="documenter.readImage().then(src=>$('#read-image').src=src)"> documenter.readImage().then(src=>$('#read-image').src=src) </button>
+```js
+documenter.readImage().then(src=>$('#read-image').src=src)
 ```
 
 ## .table( object ) : HTMLTableElement
@@ -498,6 +571,7 @@ documenter.TextArea(el, {
 ## .TextEditor(textarea, config={})
 <textarea style='outline: var(--color) solid 2px;' id="TextEditor"><h1>Hello World</h1><p>This is an example for&nbsp;<b>documenter.TextEditor()</b>&nbsp;function.</p></textarea>
 
+
 Convert textarea element to TextEditor
 <script>
   documenter.on("ready",function(){
@@ -532,10 +606,19 @@ Convert textarea element to TextEditor
 let textEditor = documenter.TextEditor(document.querySelector("textarea"),{
   toolbar           : ["formatBlock","bold","italic","underline","strikeThrough","justifyLeft","justifyCenter","justifyRight","justifyFull","insertUnorderedList","insertOrderedList","space"],
   head              : "<style> html{font-family:system-ui;background:white;} </style>", // default ""
-  allowedAttributes : ["style","src","alt"], // default all
-  allowedProperties : ["text-align","font-weight","color"], // default all
-  language          : "en",  // default ""
+  allowedAttributes : ["style","src","alt"],                // for all make null
+  allowedProperties : ["text-align","font-weight","color"], // for all make null
+  language          : "en",                                 // default "en"
 })
+```
+
+**Global TextEditor options**
+```js
+documenter.TextEditor.head              = "<style>body{}</style>"
+documenter.TextEditor.toolbar           = ["formatBlock","bold","italic","underline","strikeThrough","justifyLeft","justifyCenter","justifyRight","justifyFull","insertUnorderedList","insertOrderedList","space"]
+documenter.TextEditor.allowedProperties = ["font-weight","font-style"]
+documenter.TextEditor.allowedAttributes = ["style","src","alt"]
+documenter.TextEditor.language          = "en"
 ```
 
 **Custom Toolbar Item ** with ``texteditor.toolbar``
@@ -579,3 +662,32 @@ documenter.lss("
 }
 ")
 ```
+
+
+
+## svg to base64image
+
+<div flex-x gap>
+  <textarea input-svg space>
+    <svg hide-on-desktop="" onclick="document.querySelector('#dropmenu').classList.toggle('active') " xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"></path></svg>
+  </textarea>
+  <button button-svg2base64>Convert</button>
+</div>
+<script>
+  function svg2base64(svg){
+    return  "background: url(data:image/svg+xml;base64,"+window.btoa(svg) + ")";
+  }
+
+  documenter.on("ready",function(){
+    $("[button-svg2base64]").onclick = function(){
+      $("[base64-image] code").innerHTML = svg2base64( $("[input-svg]").value )
+    }
+  }) 
+</script>
+
+<div base64-image>
+```css
+
+```
+</div>
+
