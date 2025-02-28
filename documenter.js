@@ -16,16 +16,22 @@
   window.$  = window.$ || ((e,s=document)=>s.querySelector(e))
   window.$$ = window.$$ || ((e,s=document)=>Array.from(s.querySelectorAll(e)))
 
+  Location.prototype.__defineGetter__("parameters",function(){
+    return Object.fromEntries(decodeURIComponent(this.search).substring(1).split("&").map(e => e.split("=")))  
+  })
 
   /* mobile-style="margin-top:20px;" desktop-style="padding:4em;" hover-style="color:red;"   */
   ;(function(){
     document.addEventListener("DOMContentLoaded",function(){
+      let TABLET = 600;
+      let DESKTOP = 1080; // 900
+
       let $$ = (e)=>Array.from(document.querySelectorAll(e))
       let mobileIndex = 0;
-      $$('[mobile-style]').map(function(el){
+      documenter.when('[mobile-style]',function(el){
         el.setAttribute('mobile-style-index',mobileIndex++);
         let css = `
-        @media screen and (max-width: 600px) {
+        @media screen and (max-width: ${TABLET}px) {
           [mobile-style-index="${el.getAttribute('mobile-style-index')}"] {
             ${el.getAttribute('mobile-style')}
           }
@@ -36,11 +42,58 @@
         document.head.append(style);
       })
 
+
+      let mobiletabletindex = 0;
+      $$('[mobile-tablet-style]').map(function(el){
+        el.setAttribute('mobile-tablet-style-index', mobiletabletindex++);
+        let css = `
+        @media only screen and (max-width:${DESKTOP}px){
+          [mobile-tablet-style-index="${el.getAttribute('mobile-tablet-style-index')}"] {
+            ${el.getAttribute('mobile-tablet-style')}
+          }
+        }
+        `;
+        let style = document.createElement("style");
+        style.innerHTML = css;
+        document.head.append(style);
+      });
+
+      
+      let tabletIndex = 0;
+      $$('[tablet-style]').map(function(el){
+        el.setAttribute('tablet-style-index', tabletIndex++);
+        let css = `
+        @media only screen and (min-width:${TABLET+1}px) and (max-width:${DESKTOP}px){
+          [tablet-style-index="${el.getAttribute('tablet-style-index')}"] {
+            ${el.getAttribute('tablet-style')}
+          }
+        }
+        `;
+        let style = document.createElement("style");
+        style.innerHTML = css;
+        document.head.append(style);
+      });
+
+      let tabletdesktopIndex = 0;
+      $$('[tablet-desktop-style]').map(function(el){
+        el.setAttribute('tablet-desktop-style-index', tabletdesktopIndex++);
+        let css = `
+        @media only screen and (min-width:${TABLET+1}px){
+          [tablet-desktop-style-index="${el.getAttribute('tablet-desktop-style-index')}"] {
+            ${el.getAttribute('tablet-desktop-style')}
+          }
+        }
+        `;
+        let style = document.createElement("style");
+        style.innerHTML = css;
+        document.head.append(style);
+      });
+
       let desktopIndex = 0;
       $$('[desktop-style]').map(function(el){
         el.setAttribute('desktop-style-index', desktopIndex++);
         let css = `
-        @media screen and (min-width: 601px) {
+        @media screen and (min-width: ${DESKTOP+1}px) {
           [desktop-style-index="${el.getAttribute('desktop-style-index')}"] {
             ${el.getAttribute('desktop-style')}
           }
@@ -50,6 +103,9 @@
         style.innerHTML = css;
         document.head.append(style);
       });
+
+
+      
       
       let hoverIndex = 0;
       $$('[hover-style]').map(function(el){
@@ -67,20 +123,9 @@
     })
   })();
 
-
-  let libraries = `
-  <head>
-  <!-- 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/monokai.min.css" integrity="sha512-RLF8eOxhuwsRINc7r56dpl9a3VStqrXD+udWahutJrYdyh++2Ghnf+s4jFsOyryKZt/GNjPwbXVPH3MJpKrn2g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/an-old-hope.min.css" integrity="sha512-t47CjkEB5hx4FojnE73dBLwgrgvLBpgsHvB40ycK3cYPkLwEp7qNHyRpRDA3/zVVAAOUPJwbMVJq3uJrBqpHVQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/stackoverflow-light.min.css" integrity="sha512-RDtnAhiPytLVV3AwzHkGVMVI4szjtSjxxyhDaH3gqdHPIw5qwQld1MVGuMu1EYoof+CaEccrO3zUVb13hQFU/A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" integrity="sha512-0aPQyyeZrWj9sCA46UlmWgKOP0mUipLQ6OZXu8l4IcAmD2u31EPEy9VcIMvl7SoAaKe8bLXZhYoMaE/in+gcgA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/monokai-sublime.min.css" integrity="sha512-ade8vHOXH67Cm9z/U2vBpckPD1Enhdxl3N05ChXyFx5xikfqggrK4RrEele+VWY/iaZyfk7Bhk6CyZvlh7+5JQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-  <style>
-    
-    /* BASE CSS */
+  let libraries_base_css = `
+  <style name="base.css">
+    /*====================== BASE CSS ======================*/
 
     .flex-x,[flex-x]{
       display:flex;
@@ -96,6 +141,13 @@
       display:flex;
       flex-direction:row;
       justify-content: space-between;
+    }
+    .flex-ex,[flex-ex]{
+      display:flex;
+      flex-direction:row;
+    }
+    .flex-ex>*, [flex-ex]>*{
+      flex-basis: 100%;
     }
     .flex-y,[flex-y]{
       display:flex;
@@ -189,10 +241,9 @@
       .hide-on-mobile,[hide-on-mobile]{
         display:none;
       }
-
     }
     @media (min-width:600px)  { 
-      .show-on-mobile,[show-in-mobile]{
+      .hide-on-desktop,[hide-on-desktop]{
         display:none;
       }
     }
@@ -225,16 +276,32 @@
       opacity:0.2;
     }
 
+    .underline:hover,[underline]:hover{
+      text-decoration:underline;
+      cursor:pointer;
+    }
+
     .center,[center]{
       align-items:center;
     }
     /*-------------------------------------------------------------------------------------------*/
-    
+  </style>`;
+
+  let libraries = `
+  <head>
+  <!-- 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/monokai.min.css" integrity="sha512-RLF8eOxhuwsRINc7r56dpl9a3VStqrXD+udWahutJrYdyh++2Ghnf+s4jFsOyryKZt/GNjPwbXVPH3MJpKrn2g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/an-old-hope.min.css" integrity="sha512-t47CjkEB5hx4FojnE73dBLwgrgvLBpgsHvB40ycK3cYPkLwEp7qNHyRpRDA3/zVVAAOUPJwbMVJq3uJrBqpHVQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/stackoverflow-light.min.css" integrity="sha512-RDtnAhiPytLVV3AwzHkGVMVI4szjtSjxxyhDaH3gqdHPIw5qwQld1MVGuMu1EYoof+CaEccrO3zUVb13hQFU/A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" integrity="sha512-0aPQyyeZrWj9sCA46UlmWgKOP0mUipLQ6OZXu8l4IcAmD2u31EPEy9VcIMvl7SoAaKe8bLXZhYoMaE/in+gcgA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/monokai-sublime.min.css" integrity="sha512-ade8vHOXH67Cm9z/U2vBpckPD1Enhdxl3N05ChXyFx5xikfqggrK4RrEele+VWY/iaZyfk7Bhk6CyZvlh7+5JQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
 
     body{
       font-family: 'Ubuntu', sans-serif;
       font-family: 'Segoe UI', Tahoma, sans-serif;
-      max-width:960px;
       margin:auto;
       padding-top:var(--header-height,50px);
       line-height:1.5;
@@ -527,14 +594,26 @@
     
     
     /*=============   [tooltip]   ================*/
+    [tooltip-right], [tooltip-bottom], [tooltip-top], [tooltip-left],
+    [tooltip-right-start], [tooltip-right-end], [tooltip-bottom-start], [tooltip-bottom-end],
+    [tooltip-top-start], [tooltip-top-end], [tooltip-left-start], [tooltip-left-end] {
+      position: relative;
+    }
 
-    [tooltip-right],[tooltip-bottom]{position:relative}
-    [tooltip-right]:hover:after,[tooltip-bottom]:hover:after {
-      content: attr(tooltip-right);
+    [tooltip-right]:hover:after, 
+    [tooltip-bottom]:hover:after, 
+    [tooltip-top]:hover:after, 
+    [tooltip-left]:hover:after,
+    [tooltip-right-start]:hover:after,
+    [tooltip-right-end]:hover:after,
+    [tooltip-bottom-start]:hover:after,
+    [tooltip-bottom-end]:hover:after,
+    [tooltip-top-start]:hover:after,
+    [tooltip-top-end]:hover:after,
+    [tooltip-left-start]:hover:after,
+    [tooltip-left-end]:hover:after {
+      content: '';
       position: absolute;
-      top: 50%;
-      left: calc( 100% + 10px);
-      transform: translateY(-50%);
       background-color: #333;
       color: #fff;
       padding: 5px 10px;
@@ -542,48 +621,189 @@
       white-space: nowrap;
       z-index: 1;
       opacity: 0;
-      animation: tooltip-right 0.3s ease forwards;
+      font-size:14px;
     }
 
-    [tooltip-right]:hover:before,[tooltip-bottom]:hover:before {
+    [tooltip-right]:hover:before,
+    [tooltip-bottom]:hover:before,
+    [tooltip-top]:hover:before,
+    [tooltip-left]:hover:before,
+    [tooltip-right-start]:hover:before,
+    [tooltip-bottom-start]:hover:before,
+    [tooltip-top-start]:hover:before,
+    [tooltip-left-start]:hover:before,
+    [tooltip-right-end]:hover:before,
+    [tooltip-bottom-end]:hover:before,
+    [tooltip-top-end]:hover:before,
+    [tooltip-left-end]:hover:before {
       content: '';
       position: absolute;
+      border: 6px solid transparent;
+      opacity: 0;
+    }
+
+    [tooltip-right]:hover:after {
+      content: attr(tooltip-right);
+      left: calc(100% + 10px);
       top: 50%;
-      left: calc( 100% - 0px);
       transform: translateY(-50%);
-      border: 5px solid transparent;
-      border-right-color: #333;
-      opacity:0;
       animation: tooltip-right 0.3s ease forwards;
     }
 
-    [tooltip-bottom]:hover:after{
-      content:attr(tooltip-bottom);
-      left:50%;
-      top:calc(100% + 10px);
-      transform:translateX(-50%);
-      animation: tooltip-bottom 0.3s ease forwards;
-      z-index:2;
-    }
-    [tooltip-bottom]:hover:before{
-      left:50%;
-      top:100%;
-      transform:translateX(-50%);
-      animation: tooltip-bottom 0.3s ease forwards;
-      z-index:2;
-      border-right-color:transparent;
-      border-bottom-color:#333;
+    [tooltip-right-start]:hover:after {
+      content: attr(tooltip-right-start);
+      left: calc(100% + 10px);
+      top: calc(100% - 10px);
+      animation: tooltip-right 0.3s ease forwards;
     }
 
+    [tooltip-right-end]:hover:after {
+      content: attr(tooltip-right-end);
+      left: calc(100% + 10px);
+      top: +10px;
+      animation: tooltip-right 0.3s ease forwards;
+    }
+
+    [tooltip-right]:hover:before,[tooltip-right-start]:hover:before,[tooltip-right-end]:hover:before {
+      left: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      border-right-color: #333;
+      animation: tooltip-right 0.3s ease forwards;
+    }
+
+    [tooltip-bottom]:hover:after {
+      content: attr(tooltip-bottom);
+      left: 50%;
+      top: calc(100% + 10px);
+      transform: translateX(-50%);
+      animation: tooltip-bottom 0.3s ease forwards;
+      z-index: 2;
+    }
+
+    [tooltip-bottom-start]:hover:after {
+      content: attr(tooltip-bottom-start);
+      left: calc(50% - 10px);
+      top: calc(100% + 12px);
+      z-index: 2;
+      animation: tooltip-fade 0.3s ease forwards;
+      opacity: 1;
+    }
+    [tooltip-bottom-start]:hover:before{
+      left: 50%;
+      top: 100%;
+      transform: translateX(-50%);
+      border-bottom-color: #333;
+      animation: tooltip-fade 0.3s ease forwards;
+      z-index: 2;
+    }
+
+    [tooltip-bottom]:hover:before,[tooltip-bottom-end]:hover:before {
+      left: 50%;
+      top: 100%;
+      transform: translateX(-50%);
+      border-bottom-color: #333;
+      animation: tooltip-bottom 0.3s ease forwards;
+      z-index: 2;
+    }
+
+    [tooltip-top]:hover:after {
+      content: attr(tooltip-top);
+      left: 50%;
+      bottom: calc(100% + 10px);
+      transform: translateX(-50%);
+      animation: tooltip-top 0.3s ease forwards;
+      z-index: 2;
+    }
+
+    [tooltip-top]:hover:before {
+      left: 50%;
+      bottom: 100%;
+      transform: translateX(-50%);
+      border-top-color: #333;
+      animation: tooltip-top 0.3s ease forwards;
+      z-index: 2;
+    }
+
+    body [tooltip-top-start]:hover:after {
+      content: attr(tooltip-top-start)!important;
+      left: calc(50% - 10px);
+      bottom: calc(100% + 10px);
+      z-index: 2;
+      opacity: 1;
+    }
+    body [tooltip-top-start]:hover:before{
+      left: 50%;
+      bottom: 100%;
+      transform: translateX(-50%);
+      border-top-color: #333;
+      z-index: 2;
+      opacity: 1;
+    }
+
+    body [tooltip-top-end]:hover:after {
+      content: attr(tooltip-top-end)!important;
+      left: calc(50% + 10px);
+      transform: translate(-100%);
+      bottom: calc(100% + 10px);
+      z-index: 2;
+      opacity: 1;
+    }
+    body [tooltip-top-end]:hover:before{
+      left: 50%;
+      bottom: 100%;
+      transform: translateX(-50%);
+      border-top-color: #333;
+      z-index: 2;
+      opacity: 1;
+    }
+    
+
+
+
+    [tooltip-left]:hover:after {
+      content: attr(tooltip-left);
+      right: calc(100% + 10px);
+      top: 50%;
+      transform: translateY(-50%);
+      animation: tooltip-left 0.3s ease forwards;
+      z-index: 2;
+    }
+
+    [tooltip-left]:hover:before {
+      right: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      border-left-color: #333;
+      animation: tooltip-left 0.3s ease forwards;
+      z-index: 2;
+    }
 
     @keyframes tooltip-right {
       from { transform: translateX(-10px) translateY(-50%); opacity: 0; }
       to { transform: translateX(0) translateY(-50%); opacity: 1; }
     }
+
     @keyframes tooltip-bottom {
       from { transform: translateY(-10px) translateX(-50%); opacity: 0; }
       to { transform: translateY(0) translateX(-50%); opacity: 1; }
     }
+
+    @keyframes tooltip-top {
+      from { transform: translateY(10px) translateX(-50%); opacity: 0; }
+      to { transform: translateY(0) translateX(-50%); opacity: 1; }
+    }
+
+    @keyframes tooltip-left {
+      from { transform: translateX(10px) translateY(-50%); opacity: 0; }
+      to { transform: translateX(0) translateY(-50%); opacity: 1; }
+    }
+
+    @keyframes tooltip-fade{
+      from{opacity:0;}
+      to{opacity:1;}
+    }
+
 
     /*=============   NEW LI   ================*/
     
@@ -602,6 +822,7 @@
       line-height: 0;
       vertical-align: top;
       transform: translate(0, 0.25em);
+      margin-right:0.5em;
     }
     li[prefix="+"]:before{
       color: var(--primary);
@@ -626,6 +847,7 @@
       width : 0.25em;
       height: 0.25em;
       margin: 0.38em;
+      margin-right:0.86em;
       background: var(--front);
     }
 
@@ -656,7 +878,6 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border-radius: 100%;
       cursor: pointer;
       background:transparent;
       color:inherit;
@@ -664,6 +885,7 @@
       overflow:hidden;
       gap:0!important;
       position:relative;
+      border-radius:100%;
     }
     [icon-button]:hover{
       box-shadow:none;
@@ -675,7 +897,7 @@
       left:0;right:0;
       bottom:0;top:0;
       box-shadow:inset 0 0 0 1000px;
-      border-radius:100%;
+      border-radius:inherit;
       opacity: 0;
       transform:scale(0.5);
       transition:all .1s;
@@ -868,7 +1090,7 @@
     dropdown:focus{
       border-bottom-right-radius:0;
       border-bottom-left-radius:0;
-      
+      z-index:3;
     }
     dropdown:focus .dropdown-list{
       display:flex;
@@ -1133,9 +1355,9 @@ body{
       { pattern: /^#### (.*?)$/gm, replacement: '<h4>$1</h4>' },
       { pattern: /^##### (.*?)$/gm, replacement: '<h5>$1</h5>' },
       { pattern: /^###### (.*?)$/gm, replacement: '<h6>$1</h6>' },
-      { pattern: /^\s*\- (.*)/gm, replacement: '<li prefix="-">\n$1\n</li>' },
-      { pattern: /^\s*\+ (.*)/gm, replacement: '<li prefix="+">\n$1\n</li>' },
-      { pattern: /^\s*\* (.*)/gm, replacement: '<li prefix="*">\n$1\n</li>' },
+      { pattern: /^\s*\- (.*)/gm, replacement: '<li prefix="-">$1</li>' },
+      { pattern: /^\s*\+ (.*)/gm, replacement: '<li prefix="+">$1</li>' },
+      { pattern: /^\s*\* (.*)/gm, replacement: '<li prefix="*">$1</li>' },
       
       { pattern: /^(http[^\s]+)/gm, replacement: '<a href="$1">$1</a>' },
 
@@ -1191,12 +1413,23 @@ body{
   
   }
 
+  if(parameters["only-base-css"]!=null){
+    var html = (new DOMParser()).parseFromString(libraries_base_css, "text/html");
+    document.head.append(...html.head.children);
+    return;
+  }
 
   if(parameters["disable-style"]==null){
     // Append Libraries
-    let html = (new DOMParser()).parseFromString(libraries, "text/html");
+
+    var html = (new DOMParser()).parseFromString(libraries_base_css, "text/html");
     document.head.append(...html.head.children);
+
+    var html = (new DOMParser()).parseFromString(libraries, "text/html");
+    document.head.append(...html.head.children);
+    
   }
+
 
   document.addEventListener("DOMContentLoaded", Render)
 
@@ -1417,6 +1650,7 @@ body{
       return
     }
     progressElement = document.createElement("div")
+    progressElement.setAttribute("documenter-progress-element","documenter-progress-element")
     progressElement.style.position="fixed";
     progressElement.style.top  = "0px"
     progressElement.style.height  = "2px"
@@ -1545,6 +1779,36 @@ body{
   documenter.post = function(url,data){
     return documenter.load(url,{method:'POST',data:data})
   }
+
+  documenter.submit = function (form) {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      const formData = new FormData(form);
+
+      xhr.open("POST", form.action);
+
+      xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(xhr.response);
+        } else {
+          reject({
+            status: xhr.status,
+            statusText: xhr.statusText
+          });
+        }
+      };
+
+      xhr.onerror = function () {
+        reject({
+          status: xhr.status,
+          statusText: xhr.statusText
+        });
+      };
+
+      xhr.send(formData);
+    });
+  };
+  
 
   documenter.download = function(data, filename = "download.txt"){
     var element = document.createElement('a');
@@ -1771,13 +2035,99 @@ body{
         for( el of els ){
           if( el instanceof Document ) continue;
           if( el instanceof Window ) continue;
-          if( el.matches(selector) ){
+          if( el.matches && el.matches(selector) ){
             fn.bind(el)(e)
           }
         }
       })
     })
   }
+
+
+  documenter.when = function(selector, process, order=0, type="on"){
+    if(documenter.when.observer==null){
+      documenter.when.triggers = []
+      
+      documenter.when.check = function(nodes) {
+        for (const node of nodes) {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            for (const trigger of documenter.when.triggers) {
+              let selector = trigger.selector;
+              if (node.matches(selector)) trigger.process.apply(node, [node]);
+              if (node.querySelectorAll(selector).length > 0) {
+                for (const el of node.querySelectorAll(selector)) {
+                  trigger.process.apply(el, [el]);
+                  if(trigger.type==='once'){
+                    documenter.when.triggers.splice(documenter.when.triggers.indexOf(trigger), 1);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+
+      documenter.when.observer = new MutationObserver((mutations) => {
+        mutations = mutations.sort((a, b) => {
+          return b.type.localeCompare(a.type)
+        })
+        for (const m of mutations) {
+          if (m.type == "childList") {
+            let nodes = m.addedNodes;
+            documenter.when.check(nodes);
+          }
+        }
+      });
+      documenter.when.observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true
+      });
+      if(document.readyState=="interactive"){
+        documenter.when.check([document.documentElement]);
+      }else{
+        document.addEventListener("DOMContentLoaded",function(){ documenter.when.check([document.documentElement]); })
+      }
+
+    }
+    documenter.when.triggers.push({
+      selector,
+      process,
+      order,
+      type
+    });
+  }
+
+  documenter.see = function(selector, process, order=0){
+    return documenter.when(selector, process, order, "once")
+  }
+
+  documenter.markdown = function(code){
+    return MarkdownConverter(code)
+  }
+
+  documenter.on("click,pointerdown","[documenter-submit]",function(e){
+    if(this._innerHTML==null) this._innerHTML = this.innerHTML;
+    let form = this.parentElement
+    while(form.parentElement!=null){
+      if(form instanceof HTMLFormElement) break;
+      form = form.parentElement
+    }
+    if(form instanceof HTMLFormElement == false){
+      e.preventDefault();
+      return false;
+    }
+
+    documenter.submit(form).then(e=>{
+      this.innerHTML = this._innerHTML + " âœ“"
+      setTimeout(e=>{
+        this.innerHTML = this._innerHTML
+      },2500)
+    })
+    e.preventDefault();
+    return false;
+  })
+
 
     
   documenter.csv = {}
@@ -1889,13 +2239,13 @@ body{
 
 
 
-  function Text__AllowedElements(parent, tagNames=["br","b","i","u","strike","sub","sup"]){
+  documenter.Text__AllowedElements = function(parent, tagNames=["br","b","i","u","strike","sub","sup"]){
     tagNames = tagNames.map(e=>e.toLowerCase());
     var children = parent.childNodes;
     for(var i=0; i<children.length; i++){
       var child = children[i];
       if(child.nodeType == 1){
-        Text__AllowedElements(child, tagNames);
+        documenter.Text__AllowedElements(child, tagNames);
         if(tagNames.indexOf(child.tagName.toLowerCase()) == -1){
           var textNode = document.createTextNode(child.innerText);
           parent.insertBefore(textNode, child);
@@ -1905,12 +2255,12 @@ body{
     }
   }
     
-  function Text__AllowedProperties(parent, attributes=["text-align","font-weight","text-decoration"]){
+  documenter.Text__AllowedProperties = function(parent, attributes=["text-align","font-weight","text-decoration"]){
     var children = parent.childNodes;
     for(var i=0; i<children.length; i++){
       var child = children[i];
       if(child.nodeType == 1){
-        Text__AllowedProperties(child, attributes);
+        documenter.Text__AllowedProperties(child, attributes);
         Array.from(child.style).map(e=>{
           let have = false;
           for(let attribute of attributes){
@@ -1931,13 +2281,13 @@ body{
   }
 
 
-  function Text__AllowedAttributes(parent, attributes=["style","src"]){
+  documenter.Text__AllowedAttributes = function (parent, attributes=["style","src"]){
     attributes = attributes.map(e=>e.toLowerCase());
     var children = parent.childNodes;
     for(var i=0; i<children.length; i++){
       var child = children[i];
       if(child.nodeType == 1){
-        Text__AllowedAttributes(child, attributes);
+        documenter.Text__AllowedAttributes(child, attributes);
         for(var j=0; j<child.attributes.length; j++){
           var attribute = child.attributes[j];
           if(attributes.indexOf(attribute.name.toLowerCase()) == -1){
@@ -1948,12 +2298,12 @@ body{
     }
   }
 
-  Text__NotAllowedStyleProperties=function(parent, attributes=["fontSize","fontFamily","padding","margin","background","backgroundColor","color","textIndent","textAlign"]){
+  documenter.Text__NotAllowedStyleProperties=function(parent, attributes=["fontSize","fontFamily","padding","margin","background","backgroundColor","color","textIndent","textAlign"]){
     var children = parent.childNodes;
     for(var i=0; i<children.length; i++){
       var child = children[i];
       if(child.nodeType == 1){
-        Text__NotAllowedStyleProperties(child, attributes);
+        documenter.Text__NotAllowedStyleProperties(child, attributes);
         attributes.map(e=>{
           child.style[e] = null
         })
@@ -1963,28 +2313,32 @@ body{
 
 
   documenter.TextInput = function(element,config={}){
+    if(element.isTextInput) return
     element.setAttribute("contenteditable","true")
     if(config.language){ element.setAttribute("lang",config.language) }
     element.setAttribute("spellcheck","false")
     element.addEventListener("input",function(){
-      Text__AllowedElements(element,[])
-      Text__AllowedAttributes(element,[])
-      Text__AllowedProperties(element,[])
+      documenter.Text__AllowedElements(element,[])
+      documenter.Text__AllowedAttributes(element,[])
+      documenter.Text__AllowedProperties(element,[])
     })
     Object.defineProperty(element,"value",{
       get:e=>element.innerText
     })
+    element.isTextInput = true
   }
     
   documenter.TextArea = function(element,config={allowedAttributes:null,allowedProperties:null,allowedElements:null}){
+    if(element.isTextArea) return
     element.setAttribute("contenteditable","true")
     if(config.language){ element.setAttribute("lang",config.language) }
     element.setAttribute("spellcheck","false")
     element.addEventListener("input",function(){
-      if( config.allowedElements!=null ) Text__AllowedElements(element,config.allowedElements)
-      if( config.allowedAttributes!=null ) Text__AllowedAttributes(element,config.allowedAttributes)
-      if( config.allowedProperties!=null ) Text__AllowedProperties(element,config.allowedProperties)
+      if( config.allowedElements!=null ) documenter.Text__AllowedElements(element,config.allowedElements)
+      if( config.allowedAttributes!=null ) documenter.Text__AllowedAttributes(element,config.allowedAttributes)
+      if( config.allowedProperties!=null ) documenter.Text__AllowedProperties(element,config.allowedProperties)
     })
+    element.isTextArea = true
   }
 
 
@@ -2116,8 +2470,8 @@ body{
           if( el instanceof textEditor.iframe.contentWindow.Document ) continue;
           if( el instanceof textEditor.iframe.contentWindow.Window ) continue;
         }
-        if(config.allowedAttributes) Text__AllowedAttributes( textEditor.body, config.allowedAttributes )
-        if(config.allowedProperties) Text__AllowedProperties( textEditor.body, config.allowedProperties )
+        if(config.allowedAttributes) documenter.Text__AllowedAttributes( textEditor.body, config.allowedAttributes )
+        if(config.allowedProperties) documenter.Text__AllowedProperties( textEditor.body, config.allowedProperties )
       }
 
 
@@ -2204,12 +2558,15 @@ body{
     return iframe;
   }
 
+  documenter.markdown = function(code){
+    return MarkdownConverter(code)
+  }
 
   documenter.lss = function (code/*, variables = {}*/) {
     const selectors = {
       "@mobile": "@media only screen and (max-width: 600px)",
-      "@tablet": "@media only screen and (min-width: 600px) and (max-width:991px)",
-      "@desktop": "@media only screen and (min-width:992px)",
+      "@tablet": "@media only screen and (min-width: 600px) and (max-width:1080px)",
+      "@desktop": "@media only screen and (min-width:1081px)",
       "@mobile-text": "@media screen and (max-height: 400px)"
     };
     code = code.split(/\/\*.*\*\//).join("");
@@ -2237,7 +2594,7 @@ body{
       while ((mat = code.matchRequirsive("{", "}"))) {
         // Tag bul
         // Ara Kodu varsa dataya ekle
-        // tagı değiştir tekrar requirsive olarak git
+        // tagÄ± deÄŸiÅŸtir tekrar requirsive olarak git
         // buradan devam et.
         var tag = "";
         var dotIndex = code.lastIndexOf(";", mat[2]);
@@ -2321,8 +2678,69 @@ body{
   
 
 
+    
+  documenter.translate = function(text,source='en-US',target="tr-TR"){
+    return new Promise((resolve,reject)=>{
+      fetch('https://translate.googleapis.com/translate_a/single?client=gtx&sl='+source+'&tl='+target+'&dt=t&q='+encodeURIComponent(text))
+      .then(response => response.json())
+      .then(data => {
+        var result = data.filter(e=>e!=null && e instanceof Array && e.length!=0)[0].map(e=>e[0]).join(" ")
+        resolve(result);
+        //resolve(data[0][0][0]);
+      });
+    });
+  }
+
+
+
+
+
+  documenter.emitter = function (obj) {
+    let triggers = [];
+    obj.any = function (process, order=0) {
+      triggers.push({
+        event:"",
+        process,
+        order,
+        type: 'any'
+      });
+    }
+    obj.on = function (event, process, order=0) {
+      triggers.push({
+        event,
+        process,
+        order,
+        type: 'on'
+      });
+    }
+    obj.one = function (event, process, order=0) {
+      triggers.push({
+        event, 
+        process,
+        order,
+        type: 'once'
+      });
+    }
+    obj.emit = function (event, ...args) {
+      for (let i=0; i<triggers.length ; i++) {
+        const trigger = triggers[i]
+        if (trigger.event == event && trigger.type!="any") {
+          trigger.process.apply(obj, args);
+          if (trigger.type == 'once') {
+            triggers.splice(triggers.indexOf(trigger), 1);
+            i--;
+          }
+        }
+        if(trigger.type=="any"){
+          trigger.process.apply(obj, [event,...args] );
+        }
+      }
+    }
+  }
+
 
   documenter.dropdown = function(e){
+    if(e.querySelector(".dropdown-value")) return;
     let dropdown = e
     let select = document.createElement("input")
     select.style.display = "none";
@@ -2367,6 +2785,7 @@ body{
         dropdown.dispatchEvent(new Event('input', { bubbles: true }));
       }
       dropdown.value = dropdown.getAttribute("value")
+      
     }
     Array.from(e.children).map(e=>{
       e.onclick = function(){
@@ -2398,16 +2817,27 @@ body{
     e.appendChild(value)
     e.appendChild(list)
     e.tabIndex = 1;
-    // Varsayılan Seçenek
+    // VarsayÄ±lan SeÃ§enek
     select.value = e.getAttribute("value")
     update();
   }
+  /*
   document.addEventListener("DOMContentLoaded",function(){
-    Array.from(document.querySelectorAll("dropdown")).map(e=>{
+    documenter.when("dropdown",function(e){
       documenter.dropdown(e)
     })
+    Array.from(document.querySelectorAll("dropdown")).map(e=>{
+      //documenter.dropdown(e)
+    })
+  })
+  */
+  documenter.when("dropdown",function(e){
+    documenter.dropdown(e)
   })
 
+
+
+    
 
   // DEFAULTER
   if(document.documentElement.requestFullscreen==null && document.documentElement.webkitRequestFullscreen){
@@ -2415,8 +2845,8 @@ body{
   }
   
 
-    
-
+  // WILL REMOVE
+  /*
   documenter.see = function(selector, process, order){
 
     let triggers = []
@@ -2464,10 +2894,11 @@ body{
       Check([document.body]);
     })
   }
+  */
 
 
-  
-  
+
+
   
 
   
