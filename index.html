@@ -1,3 +1,4 @@
+
 <script src="//apps.asenax.com/documenter/documenter.js"></script>
 <meta charset="utf8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,6 +48,9 @@
 &lt;script src="//apps.asenax.com/documenter/documenter.js?disable-style=true">&lt;/script>
 &lt;!--               disable-html               -->
 &lt;script src="//apps.asenax.com/documenter/documenter.js?disable-html=true">&lt;/script>
+&lt;!--               only-base-css               -->
+&lt;script src="//apps.asenax.com/documenter/documenter.js?only-base-css=true">&lt;/script>
+
 ```
 
 
@@ -263,15 +267,18 @@ https://fonts.google.com/icons
     This is an example panel.
   </panel>
 </div>
+
+
+
 ```
 <div panel="bottom-left">
   <button icon-button="" documenter-icon-more=""></button>
   <panel style="width:200px;">
     This is an example panel.
-    Dark Theme: <button icon-button documenter-icon-contrast onclick="document.body.classList.toggle('theme-dark');document.body.classList.toggle('theme-light')"></button>
   </panel>
 </div>
 ```
+
 
 ## [tooltip]
 
@@ -298,36 +305,110 @@ https://fonts.google.com/icons
 ```
 
 
-## [mobile-style]
+
+[tooltip-right-start] : <div button documenter-icon-more="" tooltip-right-start="[tooltip-right-start]"></div> 
+```html
+<div button documenter-icon-more="" tooltip-right-start="[tooltip-right-start]"></div> 
+```
+
+[tooltip-bottom-start] : <div button documenter-icon-more="" tooltip-bottom-start="[tooltip-bottom-start]"></div> 
 
 ```html
-&lt;div mobile-style="margin-top:20px;" desktop-style="padding:4em;" hover-style="color:red;"> Example &lt;div>
+<div button documenter-icon-more="" tooltip-bottom-start="[tooltip-bottom-start]"></div> 
+```
+
+[tooltip-left-start] : <div button documenter-icon-more="" tooltip-left-start="[tooltip-left-start]"></div> 
+```html
+<div button documenter-icon-more="" tooltip-left-start="[tooltip-left-start]"></div> 
+```
+
+[tooltip-top-start] : <div button documenter-icon-more="" tooltip-top-start="[tooltip-top-start]"></div> 
+
+```html
+<div button documenter-icon-more="" tooltip-top-start="[tooltip-top-start]"></div> 
 ```
 
 
-## [desktop-style]
+
+
+
+
+
+[tooltip-right-end] : <div button documenter-icon-more="" tooltip-right-end="[tooltip-right-end]"></div> 
+```html
+<div button documenter-icon-more="" tooltip-right-end="[tooltip-right-end]"></div> 
+```
+
+[tooltip-bottom-end] : <div button documenter-icon-more="" tooltip-bottom-end="[tooltip-bottom-end]"></div> 
 
 ```html
-&lt;div mobile-style="margin-top:20px;" desktop-style="padding:4em;" hover-style="color:red;"> Example &lt;div>
+<div button documenter-icon-more="" tooltip-bottom-end="[tooltip-bottom-end]"></div> 
+```
+
+[tooltip-left-end] : <div button documenter-icon-more="" tooltip-left-end="[tooltip-left-end]"></div> 
+```html
+<div button documenter-icon-more="" tooltip-left-end="[tooltip-left-end]"></div> 
+```
+
+[tooltip-top-end] : <div button documenter-icon-more="" tooltip-top-end="[tooltip-top-end]"></div> 
+
+```html
+<div button documenter-icon-more="" tooltip-top-end="[tooltip-top-end]"></div> 
+```
+
+
+
+
+## [mobile-style]
+width &lt; 600
+```html
+&lt;div mobile-style="margin-top:20px;"> Example &lt;div>
+```
+
+## [mobile-tablet-style]
+600 &lt; width &lt; 900
+```html
+&lt;div mobile-tablet-style="margin-top:20px;"> Example &lt;div>
+```
+
+## [tablet-style]
+600 &lt; width &lt; 900
+```html
+&lt;div table-style="margin-top:20px;"> Example &lt;div>
+```
+
+## [tablet-desktop-style]
+600 &lt; width 
+```html
+&lt;div tablet-desktop-style="margin-top:20px;"> Example &lt;div>
+```
+
+## [desktop-style]
+900 &lt; width
+```html
+&lt;div desktop-style="margin-top:20px;"> Example &lt;div>
 ```
 
 
 ## [hover-style]
 
 ```html
-&lt;div mobile-style="margin-top:20px;" desktop-style="padding:4em;" hover-style="color:red;"> Example &lt;div>
+&lt;div hover-style="color:red;"> Example &lt;div>
 ```
 
 
 ## .hover 
 
+<div padding underline>.underline</div>
 <div padding hover>.hover</div>
 <div padding light>.light</div>
 
 ```
+<div underline>.underline</div>
 <div hover>.hover</div>
 <div light>.light</div>
 
+<div class="underline">.underline</div>
 <div class="hover">.hover</div>
 <div class="light">.light</div>
 ```
@@ -394,6 +475,10 @@ documenter.post("url",{name:'John'}).then(e=>e.text())
 ## .submit(HTMLFormElement)
 ```
 documenter.submit(HTMLFormElement)
+```
+Or you can add ``documenter-submit`` attribute in ``form`` element.
+```html
+&lt;button documenter-submit>Save&lt;/button>
 ```
 
 
@@ -500,6 +585,32 @@ documenter.on("ready",function(e){
     console.log("I am ready");
   })
 </script>
+
+
+
+## .when(".selector",function, order=0, type="on")
+Triggered every time.
+```
+documenter.when("h2",function(e){
+  console.log(e);
+})
+```
+
+## .see(selector, process, order=0)
+Triggered only one time.
+```
+documenter.see("dropdown",function(e){
+  console.log(e);
+})
+```
+
+<script>
+  documenter.when("h2",function(e){
+    console.log(e);
+  })
+</script>
+
+
 
 
 
@@ -664,6 +775,38 @@ documenter.lss("
 ```
 
 
+
+
+## .markdown( markdown )
+
+```js
+documenter.markdown("# Hello World \n __italic__ and **bold** text here.")
+```
+<div id="markdown-example" preview></div>
+<script id="markdown-code">
+  $("#markdown-example").innerHTML = documenter.markdown("# Hello World \n __italic__ and **bold** text here.")
+</script>
+
+
+## .translate(text,source='en-US',target="tr-TR")
+
+```js
+documenter.translate("Merhaba","tr","en").then(e=>console.log(e))
+```
+
+## .emitter(obj)
+
+```
+documenter.emitter(window)
+// listen every time 
+window.on("click",console.log)
+// listen one time 
+window.one("click",console.log)
+// listen any event 
+window.any((event,arg)=>console.log(event,arg))
+window.emit("click",{target:document})
+window.emit("test",1)
+```
 
 ## svg to base64image
 
