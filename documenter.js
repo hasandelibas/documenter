@@ -19,7 +19,7 @@
   Location.prototype.__defineGetter__("parameters",function(){
     return Object.fromEntries(decodeURIComponent(this.search).substring(1).split("&").map(e => e.split("=")))  
   })
-
+ 
   /* mobile-style="margin-top:20px;" desktop-style="padding:4em;" hover-style="color:red;"   */
   ;(function(){
     document.addEventListener("DOMContentLoaded",function(){
