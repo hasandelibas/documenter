@@ -19,7 +19,7 @@
   Location.prototype.__defineGetter__("parameters",function(){
     return Object.fromEntries(decodeURIComponent(this.search).substring(1).split("&").map(e => e.split("=")))  
   })
- 
+
   /* mobile-style="margin-top:20px;" desktop-style="padding:4em;" hover-style="color:red;"   */
   ;(function(){
     document.addEventListener("DOMContentLoaded",function(){
@@ -1778,6 +1778,16 @@ body{
 
   documenter.post = function(url,data){
     return documenter.load(url,{method:'POST',data:data})
+  };
+
+  documenter.jsonp = function(url) {
+    return new Promise(function(resolve, reject) {
+      var s = document.createElement('script');
+      var f="jsonp"+(+new Date()), b=document.body;
+      window[f] = d=>{ delete window[f]; b.removeChild(s); resolve(d); };
+      s.src=`${url}${url.includes('?')?'&':'?'}callback=${f}&v=` + parseInt(Math.random() * 16**12).toString(16)
+      b.appendChild(s);
+    })
   }
 
   documenter.submit = function (form) {
