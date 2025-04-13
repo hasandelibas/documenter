@@ -1281,6 +1281,37 @@ body{
       this.removeChild(this.firstChild)
     }
   }
+    
+    
+  Object.defineProperty(Element.prototype,"index",{
+    get:function(){
+      let el = this;
+      var i = -1;
+      do {
+        i++;
+      } while (el = el.previousElementSibling);
+      return i;
+    }
+  })
+
+
+  Object.defineProperty(Element.prototype,"parent",{
+    get:function(){
+      return this.parentElement
+    }
+  })
+
+  Object.defineProperty(Element.prototype, "next", {
+    get: function () {
+      return this.nextElementSibling || null;
+    }
+  });
+
+  Object.defineProperty(Element.prototype, "prev", {
+    get: function () {
+      return this.previousElementSibling || null;
+    }
+  });
   
   
 
