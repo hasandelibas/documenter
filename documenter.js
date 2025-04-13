@@ -2129,7 +2129,7 @@ body{
     }
 
     documenter.submit(form).then(e=>{
-      this.innerHTML = this._innerHTML + " âœ“"
+      this.innerHTML = this._innerHTML + " ✓"
       setTimeout(e=>{
         this.innerHTML = this._innerHTML
       },2500)
@@ -2337,6 +2337,55 @@ body{
     })
     element.isTextInput = true
   }
+
+  documenter.NumberInput = function(element, config = {}) {
+    if (element.isNumberInput) return;
+
+    element.setAttribute("contenteditable", "true");
+    if (config.language) {
+      element.setAttribute("lang", config.language);
+    }
+    element.setAttribute("spellcheck", "false");
+
+    element.addEventListener("input", function () {
+      // Remove disallowed tags, attributes, and styles
+      documenter.Text__AllowedElements(element, []);
+      documenter.Text__AllowedAttributes(element, []);
+      documenter.Text__AllowedProperties(element, []);
+
+      // Filter only numbers (and optional characters like '.' or '-')
+      let text = element.innerText;
+      let filtered = text.replace(/[^0-9.\-]/g, '');
+
+      // Only allow a single decimal point and minus at start
+      let parts = filtered.match(/^-?(\d+)?(\.\d*)?/);
+      if (parts) {
+        element.innerText = parts[0];
+      } else {
+        element.innerText = '';
+      }
+
+      // Move cursor to the end
+      let range = document.createRange();
+      let sel = window.getSelection();
+      range.selectNodeContents(element);
+      range.collapse(false);
+      sel.removeAllRanges();
+      sel.addRange(range);
+    });
+
+    Object.defineProperty(element, "value", {
+      get: () => {
+        let v = parseFloat(element.innerText);
+        return isNaN(v) ? null : v;
+      },
+      set: (val) => {
+        element.innerText = (typeof val === "number" || typeof val === "string") ? val : "";
+      }
+    });
+
+    element.isNumberInput = true;
+  };
     
   documenter.TextArea = function(element,config={allowedAttributes:null,allowedProperties:null,allowedElements:null}){
     if(element.isTextArea) return
@@ -2604,7 +2653,7 @@ body{
       while ((mat = code.matchRequirsive("{", "}"))) {
         // Tag bul
         // Ara Kodu varsa dataya ekle
-        // tagÄ± deÄŸiÅŸtir tekrar requirsive olarak git
+        // tagı değiştir tekrar requirsive olarak git
         // buradan devam et.
         var tag = "";
         var dotIndex = code.lastIndexOf(";", mat[2]);
@@ -2827,7 +2876,7 @@ body{
     e.appendChild(value)
     e.appendChild(list)
     e.tabIndex = 1;
-    // VarsayÄ±lan SeÃ§enek
+    // Varsayılan Seçenek
     select.value = e.getAttribute("value")
     update();
   }
