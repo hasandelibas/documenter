@@ -44,7 +44,7 @@
 
 
       let mobiletabletindex = 0;
-      $$('[mobile-tablet-style]').map(function(el){
+      documenter.when('[mobile-tablet-style]',function(el){
         el.setAttribute('mobile-tablet-style-index', mobiletabletindex++);
         let css = `
         @media only screen and (max-width:${DESKTOP}px){
@@ -60,7 +60,7 @@
 
       
       let tabletIndex = 0;
-      $$('[tablet-style]').map(function(el){
+      documenter.when('[tablet-style]',function(el){
         el.setAttribute('tablet-style-index', tabletIndex++);
         let css = `
         @media only screen and (min-width:${TABLET+1}px) and (max-width:${DESKTOP}px){
@@ -75,7 +75,7 @@
       });
 
       let tabletdesktopIndex = 0;
-      $$('[tablet-desktop-style]').map(function(el){
+      documenter.when('[tablet-desktop-style]',function(el){
         el.setAttribute('tablet-desktop-style-index', tabletdesktopIndex++);
         let css = `
         @media only screen and (min-width:${TABLET+1}px){
@@ -90,7 +90,7 @@
       });
 
       let desktopIndex = 0;
-      $$('[desktop-style]').map(function(el){
+      documenter.when('[desktop-style]',function(el){
         el.setAttribute('desktop-style-index', desktopIndex++);
         let css = `
         @media screen and (min-width: ${DESKTOP+1}px) {
@@ -108,7 +108,7 @@
       
       
       let hoverIndex = 0;
-      $$('[hover-style]').map(function(el){
+      documenter.when('[hover-style]',function(el){
         el.setAttribute('hover-style-index',hoverIndex++);
         let css = `
           [hover-style-index="${el.getAttribute('hover-style-index')}"]:hover {
@@ -1606,24 +1606,6 @@ body{
     }
 
 
-    // [documenter-icon-x]
-    // https://fonts.google.com/icons
-    let icons = {
-      'arrow-left' : '<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 -960 960 960"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"></path></svg>',
-      'more'       : '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/></svg>',
-      'fullscreen' : '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-120v-200h80v120h120v80H120Zm520 0v-80h120v-120h80v200H640ZM120-640v-200h200v80H200v120h-80Zm640 0v-120H640v-80h200v200h-80Z"/></svg>',
-      'contrast'   : '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm40-83q119-15 199.5-104.5T800-480q0-123-80.5-212.5T520-797v634Z"/></svg>',
-      'power'      : '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M440-440v-400h80v400h-80Zm40 320q-74 0-139.5-28.5T226-226q-49-49-77.5-114.5T120-480q0-80 33-151t93-123l56 56q-48 40-75 97t-27 121q0 116 82 198t198 82q117 0 198.5-82T760-480q0-64-26.5-121T658-698l56-56q60 52 93 123t33 151q0 74-28.5 139.5t-77 114.5q-48.5 49-114 77.5T480-120Z"/></svg>',
-      'email'      : '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg>',
-    }
-    icons["left-arrow"] = icons["arrow-left"]
-    for(let icon in icons){
-      let selector = "[documenter-icon-"+icon+"]";
-      Array.from(document.querySelectorAll(selector)).map(e=>{
-        e.innerHTML = icons[icon].split("<svg").join('<svg fill="currentColor" style="width:1.5em;height:1.5em" ');
-      })
-    }
-    documenter.icons = icons;
 
     // Tab System
     if(document.body.classList.contains("tab-system")){
@@ -1668,6 +1650,74 @@ body{
   //// ============================ documenter ============================ ////
   //// ============================ documenter ============================ ////
   window.documenter = {}
+
+
+  // [documenter-icon-x]
+  // https://fonts.google.com/icons
+  let icons = {
+    'arrow-left' : '<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 -960 960 960"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"></path></svg>',
+    'more'       : '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/></svg>',
+    'fullscreen' : '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-120v-200h80v120h120v80H120Zm520 0v-80h120v-120h80v200H640ZM120-640v-200h200v80H200v120h-80Zm640 0v-120H640v-80h200v200h-80Z"/></svg>',
+    'contrast'   : '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm40-83q119-15 199.5-104.5T800-480q0-123-80.5-212.5T520-797v634Z"/></svg>',
+    'power'      : '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M440-440v-400h80v400h-80Zm40 320q-74 0-139.5-28.5T226-226q-49-49-77.5-114.5T120-480q0-80 33-151t93-123l56 56q-48 40-75 97t-27 121q0 116 82 198t198 82q117 0 198.5-82T760-480q0-64-26.5-121T658-698l56-56q60 52 93 123t33 151q0 74-28.5 139.5t-77 114.5q-48.5 49-114 77.5T480-120Z"/></svg>',
+    'email'      : '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg>',
+  }
+  icons["left-arrow"] = icons["arrow-left"]
+  for(let icon in icons){
+    let selector = "[documenter-icon-"+icon+"]";
+    Array.from(document.querySelectorAll(selector)).map(e=>{
+      e.innerHTML = icons[icon].split("<svg").join('<svg fill="currentColor" style="width:1.5em;height:1.5em" ');
+    })
+  }
+  documenter.icons = icons;
+  
+
+  documenter.emitter = function (obj) {
+    let triggers = [];
+    obj.any = function (process, order=0) {
+      triggers.push({
+        event:"",
+        process,
+        order,
+        type: 'any'
+      });
+    }
+    obj.on = function (event, process, order=0) {
+      triggers.push({
+        event,
+        process,
+        order,
+        type: 'on'
+      });
+    }
+    obj.one = function (event, process, order=0) {
+      triggers.push({
+        event, 
+        process,
+        order,
+        type: 'once'
+      });
+    }
+    obj.emit = function (event, ...args) {
+      for (let i=0; i<triggers.length ; i++) {
+        const trigger = triggers[i]
+        if (trigger.event == event && trigger.type!="any") {
+          trigger.process.apply(obj, args);
+          if (trigger.type == 'once') {
+            triggers.splice(triggers.indexOf(trigger), 1);
+            i--;
+          }
+        }
+        if(trigger.type=="any"){
+          trigger.process.apply(obj, [event,...args] );
+        }
+      }
+    }
+  }
+
+
+
+
   let succesTimeout = null
 
   progressElement = null
@@ -1784,7 +1834,7 @@ body{
         if (xhr.status === 200) {
           documenter.success()
           response = xhr
-          res({
+          let _response = {
             text : function(){
               return Promise.resolve(new TextDecoder("utf-8").decode(xhr.response))
             },
@@ -1797,7 +1847,9 @@ body{
             json : function(){
               return Promise.resolve( JSON.parse( new TextDecoder("utf-8").decode(xhr.response) ))
             },
-          })
+          }
+          documenter.post.emit("load",url,_response);
+          res(_response)
         } else {
           console.error('Error downloading the file. Status code: ' + xhr.status);
           rej(xhr.status)
@@ -1810,6 +1862,7 @@ body{
   documenter.post = function(url,data){
     return documenter.load(url,{method:'POST',data:data})
   };
+  documenter.emitter(documenter.post)
 
   documenter.jsonp = function(url) {
     return new Promise(function(resolve, reject) {
@@ -1900,7 +1953,7 @@ body{
     return div;
   }
 
-  documenter.message = function(text){
+  documenter.message = function(text,remove=6000){
     if(documenter.message.id == null) documenter.message.id = 0
     documenter.message.id++ 
 
@@ -1911,16 +1964,17 @@ body{
     div.style.right  = "20px"
     div.style.maxWidth = "calc(100% - 40px)"
     div.style.bottom = "20px"
-    div.style.background = "#000"
-    div.style.color     = "white"
+    div.style.background = "var(--back,#000)"
+    div.style.color     = "var(--front,#FFF)"
     div.style.borderRadius = "10px"
     div.style.padding ="1em"
     div.style.opacity = "0"
+    div.style.zIndex = "9999"
     div.style.transform = "translateX(100%)"
     div.style.transition = "transform .5s, opacity .5s, bottom 0.5s";
     div.innerHTML = text
     
-    let minTop = Math.min(window.innerHeight,...Array.from(document.querySelectorAll("[documenter-message]")).map(e=>e.getBoundingClientRect().y) ) 
+    let minTop = Math.min(window.innerHeight-30,...Array.from(document.querySelectorAll("[documenter-message]")).map(e=>e.getBoundingClientRect().y) ) 
     div.style.bottom = (window.innerHeight-minTop + 20) + "px"
     
 
@@ -1932,7 +1986,8 @@ body{
         el.style.transform = "translateX(0%)"
       }
     })
-    setTimeout(e=>{
+
+    div.close = function(){
       let el = document.querySelector("#"+div.id)
       if(el){
         setTimeout(e=>el.remove(),1000)
@@ -1942,7 +1997,9 @@ body{
       Array.from(document.querySelectorAll("[documenter-message]")).map(e=>{
         if(e!=el) e.style.bottom = (parseFloat(e.style.bottom) - el.getBoundingClientRect().height - 20) + "px"
       })
-    },6000) 
+    }
+
+    setTimeout(e=>{ div.close() },remove) 
     return div;
   }
 
@@ -2160,7 +2217,7 @@ body{
     }
 
     documenter.submit(form).then(e=>{
-      this.innerHTML = this._innerHTML + " ✓"
+      this.innerHTML = this._innerHTML + " âœ“"
       setTimeout(e=>{
         this.innerHTML = this._innerHTML
       },2500)
@@ -2279,6 +2336,20 @@ body{
   }
 
 
+
+  documenter.debounce = function (func, time = 300) {
+    let timeoutId;
+
+    return function (...args) {
+      // Clear the previous timeout if the function is called again within the delay
+      clearTimeout(timeoutId);
+
+      // Set a new timeout
+      timeoutId = setTimeout(() => {
+        func.apply(this, args); // Call the original function with the correct context and arguments
+      }, time);
+    };
+  };
 
   documenter.Text__AllowedElements = function(parent, tagNames=["br","b","i","u","strike","sub","sup"]){
     tagNames = tagNames.map(e=>e.toLowerCase());
@@ -2684,7 +2755,7 @@ body{
       while ((mat = code.matchRequirsive("{", "}"))) {
         // Tag bul
         // Ara Kodu varsa dataya ekle
-        // tagı değiştir tekrar requirsive olarak git
+        // tagÄ± deÄŸiÅŸtir tekrar requirsive olarak git
         // buradan devam et.
         var tag = "";
         var dotIndex = code.lastIndexOf(";", mat[2]);
@@ -2784,51 +2855,6 @@ body{
 
 
 
-
-  documenter.emitter = function (obj) {
-    let triggers = [];
-    obj.any = function (process, order=0) {
-      triggers.push({
-        event:"",
-        process,
-        order,
-        type: 'any'
-      });
-    }
-    obj.on = function (event, process, order=0) {
-      triggers.push({
-        event,
-        process,
-        order,
-        type: 'on'
-      });
-    }
-    obj.one = function (event, process, order=0) {
-      triggers.push({
-        event, 
-        process,
-        order,
-        type: 'once'
-      });
-    }
-    obj.emit = function (event, ...args) {
-      for (let i=0; i<triggers.length ; i++) {
-        const trigger = triggers[i]
-        if (trigger.event == event && trigger.type!="any") {
-          trigger.process.apply(obj, args);
-          if (trigger.type == 'once') {
-            triggers.splice(triggers.indexOf(trigger), 1);
-            i--;
-          }
-        }
-        if(trigger.type=="any"){
-          trigger.process.apply(obj, [event,...args] );
-        }
-      }
-    }
-  }
-
-
   documenter.dropdown = function(e){
     if(e.querySelector(".dropdown-value")) return;
     let dropdown = e
@@ -2907,7 +2933,7 @@ body{
     e.appendChild(value)
     e.appendChild(list)
     e.tabIndex = 1;
-    // Varsayılan Seçenek
+    // VarsayÄ±lan SeÃ§enek
     select.value = e.getAttribute("value")
     update();
   }
